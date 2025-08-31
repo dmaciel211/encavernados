@@ -1,0 +1,61 @@
+title = "Encavernados"
+theme = "doit"
+languageCode = "es-ar"
+baseURL = "https://encavernados.com/"
+
+defaultContentLanguage = "es"
+
+# La sección principal (el “blog”) será /articulos
+
+[params]
+  mainSections = ["articulos"]
+ CSS = ["css/custom.css"]
+
+# URLs prolijas para artículos
+[permalinks]
+  articulos = "/articulos/:slug/"
+
+
+# Menú principal
+[menu]
+  [[menu.main]]
+    identifier = "inicio"
+    name = "Inicio"
+    url = "/"
+    weight = 1
+
+  [[menu.main]]
+    identifier = "articulos"
+    name = "Artículos"
+    url = "/articulos/"
+    weight = 2
+
+  [[menu.main]]
+    identifier = "categorias"
+    name = "Categorías"
+    url = "/categories/"
+    weight = 3
+
+  [[menu.main]]
+    identifier = "etiquetas"
+    name = "Etiquetas"
+    url = "/tags/"
+    weight = 4
+
+  [[menu.main]]
+    identifier = "libros"
+    name = "Libros"
+    url = "/libros/"
+    weight = 5
+
+  [[menu.main]]
+    identifier = "sobre"
+    name = "Sobre nosotros"
+    url = "/sobre/"
+    weight = 6
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
