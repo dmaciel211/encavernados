@@ -12,34 +12,5 @@
     <!-- Decap CMS (ex Netlify CMS) -->
     <script defer src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   </head>
-  <body>
-    <div id="nc-root"></div>
-
-    <script>
-      // Función: ¿hay sesión activa? (token de Netlify Identity guardado)
-      function isLoggedIn() {
-        try {
-          const raw = localStorage.getItem('gotrue.user'); // así lo guarda Identity
-          if (!raw) return false;
-          const data = JSON.parse(raw);
-          if (!data || !data.token || !data.expires_at) return false;
-          // chequeo de expiración básico
-          return new Date(data.expires_at).getTime() > Date.now() + 5000;
-        } catch (e) {
-          return false;
-        }
-      }
-
-      // Sin tocar invites ni modales: si no hay sesión, mandamos a la UI nativa de Netlify
-      document.addEventListener('DOMContentLoaded', function () {
-        if (!isLoggedIn()) {
-          // redirige al login/recupero nativo de Netlify en la MISMA pestaña
-          location.replace('/.netlify/identity');
-          return;
-        }
-        // Si hay sesión, dejamos que Decap CMS monte su panel en #nc-root
-        // (no hacemos init manual; el script de Decap ya auto-inicializa).
-      });
-    </script>
-  </body>
+  
 </html>
