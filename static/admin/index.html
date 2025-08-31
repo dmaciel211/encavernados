@@ -1,57 +1,21 @@
-﻿<!doctype html>
+﻿<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Encavernados — Admin</title>
+<head>
+  <title>A static website</title>
 
-    <!-- 1) Cargamos primero Decap CMS (renderiza la UI del admin y el botón Login) -->
-    <script defer src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <!-- include the widget -->
+  <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+  <!-- Add a menu:
+   Log in / Sign up - when the user is not logged in
+   Username / Log out - when the user is logged in
+  -->
+  <div data-netlify-identity-menu></div>
 
-    <!-- 2) Cargamos Netlify Identity SOLO si no existe aún -->
-    <script>
-      (function () {
-        function loadIdentityOnce() {
-          if (window.netlifyIdentity) return; // ya está cargado
-          var s = document.createElement('script');
-          s.src = 'https://identity.netlify.com/v1/netlify-identity-widget.js';
-          s.defer = true;
-          document.head.appendChild(s);
-        }
-        // Intento inmediato y reintento suave por si el CMS demora en inicializar
-        loadIdentityOnce();
-        setTimeout(loadIdentityOnce, 800);
-      })();
-    </script>
-  </head>
-  <body>
-    <div id="nc-root"></div>
-
-    <!-- 3) Guardia anti-duplicado: si aparecen 2 iframes, conservar el último y limpiar el resto -->
-    <script>
-      (function () {
-        function pruneDuplicates() {
-          // A veces el widget deja 2 iframes con el MISMO id y uno tapa al otro.
-          var frames = document.querySelectorAll('iframe#netlify-identity-widget');
-          if (frames.length > 1) {
-            // dejo SOLO el último (suele ser el que queda activo)
-            for (var i = 0; i < frames.length - 1; i++) {
-              frames[i].remove();
-            }
-          }
-        }
-
-        // Corremos la limpieza un par de veces por si el segundo iframe aparece tarde
-        document.addEventListener('DOMContentLoaded', function () {
-          setTimeout(pruneDuplicates, 150);
-          setTimeout(pruneDuplicates, 400);
-          setTimeout(pruneDuplicates, 1000);
-        });
-
-        // Además, por si se inyecta más tarde, observamos mutaciones en el body
-        const mo = new MutationObserver(pruneDuplicates);
-        mo.observe(document.documentElement || document.body, { childList: true, subtree: true });
-      })();
-    </script>
-  </body>
+  <!-- Add a simpler button:
+    Simple button that will open the modal.
+  -->
+  <div data-netlify-identity-button>Login with Netlify Identity</div>
+</body>
 </html>
