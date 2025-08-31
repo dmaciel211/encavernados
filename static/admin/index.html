@@ -5,9 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Encavernados — Admin</title>
 
- <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
-
+    <!-- SOLO Netlify Identity al inicio -->
+    <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   </head>
-  
+  <body>
+    <div id="nc-root"></div>
+
+    <script>
+      (function () {
+        // Carga el CMS DINÁMICAMENTE sólo cuando hay usuario
+        function loadCMSOnce() {
+          if (window.__cmsLoaded) return;
+          window.__cmsLoaded = true;
+          var s = document.createElement('script');
+          s.src = 'https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js';
+          s.defer = true;
+          document.head.appendChild(s);
+        }
+
+        function cleanDuplicateIdentityIframe() {
+          // Por las dudas, si algún entorno mete dos iframes, dejamos solo el último
+          var frames = document.querySelectorAll('#netlify-identity-widget');
+          if (frames.length > 1) {
+            for (var i = 0; i < frames.length - 1; i++) {
+              frames[i].remove();
+            }
+          }
+        }
+
+        function start() {
+          if (!window.netlifyIdentity) {
+            // Esperar a que cargue el widget
+            return setTimeout(start, 60);
+          }
+
+          // Limpieza anti-duplicado
+          setTimeout(cleanDuplicateIdentityIframe, 200);
+
+          // Si ya hay sesión, cargamos el CMS y listo
+          window.netlifyIdentity.on('init', function (user) {
+            if (user) {
+              loadCMSOnce();
+            } else {
+              // Abrí el login nativo (acá podés usar "Forgot password")
+              window.netlifyIdentity.open('login');
+            }
+          });
+
+          // Cuando el usuario se loguea, recièn ahí cargamos el CMS
+          window.netlifyIdentity.on('login', function () {
+            loadCMSOnce();
+          });
+
+          // Si hace logout, recargamos para volver al estado “solo Identity”
+          window.netlifyIdentity.on('logout', function () {
+            location.reload();
+          });
+        }
+
+        document.addEventListener('DOMContentLoaded', start);
+      })();
+    </script>
+  </body>
 </html>
