@@ -1,0 +1,35 @@
+backend:
+  name: git-gateway        # usa Netlify Identity + Git Gateway
+  branch: main             # tu rama
+
+media_folder: "static/media"   # dónde se guardan los archivos en el repo
+public_folder: "/media"        # cómo se referencian desde el sitio
+
+locale: "es"
+
+# Opcional: workflow con revisión (PRs). Si querés publicar directo, borrá esta línea.
+publish_mode: editorial_workflow
+
+collections:
+  - name: "articulos"
+    label: "Artículos"
+    label_singular: "Artículo"
+    folder: "content/articulos"
+    create: true
+    slug: "{{slug}}"
+    path: "{{slug}}/index"    # crea leaf bundle: /articulos/slug/index.md
+    media_folder: ""          # (hereda de arriba, media va a /static/media)
+    public_folder: ""         # (hereda de arriba)
+    fields:
+      - { label: "Título", name: "title", widget: "string" }
+      - { label: "Fecha", name: "date", widget: "datetime", format: "YYYY-MM-DDTHH:mm:ssZ" }
+      - { label: "Borrador", name: "draft", widget: "boolean", default: false }
+      - { label: "Categorías", name: "categories", widget: "list", default: [] }
+      - { label: "Etiquetas", name: "tags", widget: "list", default: [] }
+      - label: "Portada"
+        name: "cover"
+        widget: "image"
+        allow_multiple: false
+        hint: "Imagen de portada del artículo (se recomienda WebP)."
+      - { label: "Descripción (resumen)", name: "description", widget: "text", required: false }
+      - { label: "Contenido", name: "body", widget: "markdown" }
