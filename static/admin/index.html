@@ -5,52 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Encavernados — Admin</title>
 
-    <!-- Cargar scripts con defer para evitar que el DOM esté vacío -->
-    <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <!-- Decap CMS (ex Netlify CMS) -->
     <script defer src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+    <script>
+      // === CARGA CONTROLADA DE IDENTITY (evita doble inyección) ===
+      (function loadIdentityOnce(){
+        if (window.__identityLoaded) return;
+        window.__identityLoaded = true;
+        var s = document.createElement('script');
+        s.src = "https://identity.netlify.com/v1/netlify-identity-widget.js";
+        s.defer = true;
+        s.onload = function(){
+          // Por si algún navegador/estado previo dejó 2 iframes, limpiamos duplicados:
+          setTimeout(function(){
+            var iframes = document.querySelectorAll('iframe#netlify-identity-widget');
+            if (iframes.length > 1) {
+              // conservamos el último (suele ser el válido) y removemos anteriores
+              for (var i = 0; i < iframes.length - 1; i++) {
+                iframes[i].parentNode && iframes[i].parentNode.removeChild(iframes[i]);
+              }
+            }
+          }, 0);
+        };
+        document.head.appendChild(s);
+      })();
+    </script>
   </head>
   <body>
     <div id="nc-root"></div>
 
     <script>
-      // Helper: después de login, quedate en /admin
+      // === UX: si viene con #invite_token en cualquier ruta, procesar acá ===
       function redirectAfterLogin() {
         if (location.pathname !== '/admin/') {
-          location.href = '/admin/';
+          location.replace('/admin/');
         } else {
-          // refrescá el CMS para que levante el user
           location.reload();
         }
       }
 
       document.addEventListener('DOMContentLoaded', function () {
-        // 1) Procesar invitación si viene con #invite_token
-        if (window.netlifyIdentity && location.hash.includes('invite_token')) {
-          window.netlifyIdentity.on('init', (user) => {
-            if (!user) {
-              window.netlifyIdentity.acceptInvite()
-                .then((user) => {
-                  // Invitación aceptada → abrir login o redirigir
-                  if (user) {
-                    redirectAfterLogin();
-                  } else {
+        // Aceptar invitación si llega con invite_token
+        var handleInvite = function() {
+          if (!window.netlifyIdentity) return;
+          if (location.hash && location.hash.indexOf('invite_token=') !== -1) {
+            window.netlifyIdentity.on('init', function(user){
+              if (!user) {
+                window.netlifyIdentity.acceptInvite()
+                  .then(function(user){
+                    if (user) redirectAfterLogin();
+                    else window.netlifyIdentity.open('login');
+                  })
+                  .catch(function(err){
+                    console.error('acceptInvite error:', err);
                     window.netlifyIdentity.open('login');
-                  }
-                })
-                .catch((err) => {
-                  console.error('acceptInvite error:', err);
-                  // Si falla, abrir el login manualmente
-                  window.netlifyIdentity.open('login');
-                });
-            }
-          });
-        }
+                  });
+              }
+            });
+          }
+          // Reabrir login si hace falta
+          window.netlifyIdentity.on && window.netlifyIdentity.on('login', redirectAfterLogin);
+          window.netlifyIdentity.on && window.netlifyIdentity.on('logout', function(){ location.reload(); });
+        };
 
-        // 2) En cualquier caso, si loguea, que vuelva a /admin
-        if (window.netlifyIdentity) {
-          window.netlifyIdentity.on('login', () => redirectAfterLogin());
-          window.netlifyIdentity.on('logout', () => { location.reload(); });
-        }
+        // Esperar a que Identity esté listo
+        var waitId = setInterval(function(){
+          if (window.netlifyIdentity) {
+            clearInterval(waitId);
+            handleInvite();
+          }
+        }, 50);
       });
     </script>
   </body>
