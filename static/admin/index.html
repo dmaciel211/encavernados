@@ -5,12 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Encavernados — Admin</title>
 
-    <!-- Cargá los scripts con defer para que el DOM exista al ejecutarse -->
+    <!-- Cargar scripts con defer para evitar que el DOM esté vacío -->
     <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script defer src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   </head>
   <body>
-    <!-- Nodo raíz explícito para el CMS (evita null en appendChild) -->
     <div id="nc-root"></div>
+
+    <script>
+      // Helper: después de login, quedate en /admin
+      function redirectAfterLogin() {
+        if (location.pathname !== '/admin/') {
+          location.href = '/admin/';
+        } else {
+          // refrescá el CMS para que levante el user
+          location.reload();
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        // 1) Procesar invitación si viene con #invite_token
+        if (window.netlifyIdentity && location.hash.includes('invite_token')) {
+          window.netlifyIdentity.on('init', (user) => {
+            if (!user) {
+              window.netlifyIdentity.acceptInvite()
+                .then((user) => {
+                  // Invitación aceptada → abrir login o redirigir
+                  if (user) {
+                    redirectAfterLogin();
+                  } else {
+                    window.netlifyIdentity.open('login');
+                  }
+                })
+                .catch((err) => {
+                  console.error('acceptInvite error:', err);
+                  // Si falla, abrir el login manualmente
+                  window.netlifyIdentity.open('login');
+                });
+            }
+          });
+        }
+
+        // 2) En cualquier caso, si loguea, que vuelva a /admin
+        if (window.netlifyIdentity) {
+          window.netlifyIdentity.on('login', () => redirectAfterLogin());
+          window.netlifyIdentity.on('logout', () => { location.reload(); });
+        }
+      });
+    </script>
   </body>
 </html>
