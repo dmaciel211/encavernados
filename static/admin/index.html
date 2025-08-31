@@ -1,69 +1,56 @@
-﻿<!doctype html>
+﻿!doctype html>
 <html>
   <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Encavernados — Admin</title>
 
-    <!-- SOLO Netlify Identity al inicio -->
-    <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <!-- 1) Cargamos primero Decap CMS (renderiza la UI del admin y el botón Login) -->
+    <script defer src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+    <!-- 2) Cargamos Netlify Identity SOLO si no existe aún -->
+    <script>
+      (function () {
+        function loadIdentityOnce() {
+          if (window.netlifyIdentity) return; // ya está cargado
+          var s = document.createElement('script');
+          s.src = 'https://identity.netlify.com/v1/netlify-identity-widget.js';
+          s.defer = true;
+          document.head.appendChild(s);
+        }
+        // Intento inmediato y reintento suave por si el CMS demora en inicializar
+        loadIdentityOnce();
+        setTimeout(loadIdentityOnce, 800);
+      })();
+    </script>
   </head>
   <body>
     <div id="nc-root"></div>
 
+    <!-- 3) Guardia anti-duplicado: si aparecen 2 iframes, conservar el último y limpiar el resto -->
     <script>
       (function () {
-        // Carga el CMS DINÁMICAMENTE sólo cuando hay usuario
-        function loadCMSOnce() {
-          if (window.__cmsLoaded) return;
-          window.__cmsLoaded = true;
-          var s = document.createElement('script');
-          s.src = 'https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js';
-          s.defer = true;
-          document.head.appendChild(s);
-        }
-
-        function cleanDuplicateIdentityIframe() {
-          // Por las dudas, si algún entorno mete dos iframes, dejamos solo el último
-          var frames = document.querySelectorAll('#netlify-identity-widget');
+        function pruneDuplicates() {
+          // A veces el widget deja 2 iframes con el MISMO id y uno tapa al otro.
+          var frames = document.querySelectorAll('iframe#netlify-identity-widget');
           if (frames.length > 1) {
+            // dejo SOLO el último (suele ser el que queda activo)
             for (var i = 0; i < frames.length - 1; i++) {
               frames[i].remove();
             }
           }
         }
 
-        function start() {
-          if (!window.netlifyIdentity) {
-            // Esperar a que cargue el widget
-            return setTimeout(start, 60);
-          }
+        // Corremos la limpieza un par de veces por si el segundo iframe aparece tarde
+        document.addEventListener('DOMContentLoaded', function () {
+          setTimeout(pruneDuplicates, 150);
+          setTimeout(pruneDuplicates, 400);
+          setTimeout(pruneDuplicates, 1000);
+        });
 
-          // Limpieza anti-duplicado
-          setTimeout(cleanDuplicateIdentityIframe, 200);
-
-          // Si ya hay sesión, cargamos el CMS y listo
-          window.netlifyIdentity.on('init', function (user) {
-            if (user) {
-              loadCMSOnce();
-            } else {
-              // Abrí el login nativo (acá podés usar "Forgot password")
-              window.netlifyIdentity.open('login');
-            }
-          });
-
-          // Cuando el usuario se loguea, recièn ahí cargamos el CMS
-          window.netlifyIdentity.on('login', function () {
-            loadCMSOnce();
-          });
-
-          // Si hace logout, recargamos para volver al estado “solo Identity”
-          window.netlifyIdentity.on('logout', function () {
-            location.reload();
-          });
-        }
-
-        document.addEventListener('DOMContentLoaded', start);
+        // Además, por si se inyecta más tarde, observamos mutaciones en el body
+        const mo = new MutationObserver(pruneDuplicates);
+        mo.observe(document.documentElement || document.body, { childList: true, subtree: true });
       })();
     </script>
   </body>
