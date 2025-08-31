@@ -5,77 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Encavernados — Admin</title>
 
+    <!-- Importante: cargamos el widget de Identity solo para que Decap pueda leer el token si ya existe.
+         NO abrimos ningún modal ni tocamos invites. -->
+    <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
     <!-- Decap CMS (ex Netlify CMS) -->
     <script defer src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-
-    <script>
-      // === CARGA CONTROLADA DE IDENTITY (evita doble inyección) ===
-      (function loadIdentityOnce(){
-        if (window.__identityLoaded) return;
-        window.__identityLoaded = true;
-        var s = document.createElement('script');
-        s.src = "https://identity.netlify.com/v1/netlify-identity-widget.js";
-        s.defer = true;
-        s.onload = function(){
-          // Por si algún navegador/estado previo dejó 2 iframes, limpiamos duplicados:
-          setTimeout(function(){
-            var iframes = document.querySelectorAll('iframe#netlify-identity-widget');
-            if (iframes.length > 1) {
-              // conservamos el último (suele ser el válido) y removemos anteriores
-              for (var i = 0; i < iframes.length - 1; i++) {
-                iframes[i].parentNode && iframes[i].parentNode.removeChild(iframes[i]);
-              }
-            }
-          }, 0);
-        };
-        document.head.appendChild(s);
-      })();
-    </script>
   </head>
   <body>
     <div id="nc-root"></div>
 
     <script>
-      // === UX: si viene con #invite_token en cualquier ruta, procesar acá ===
-      function redirectAfterLogin() {
-        if (location.pathname !== '/admin/') {
-          location.replace('/admin/');
-        } else {
-          location.reload();
+      // Función: ¿hay sesión activa? (token de Netlify Identity guardado)
+      function isLoggedIn() {
+        try {
+          const raw = localStorage.getItem('gotrue.user'); // así lo guarda Identity
+          if (!raw) return false;
+          const data = JSON.parse(raw);
+          if (!data || !data.token || !data.expires_at) return false;
+          // chequeo de expiración básico
+          return new Date(data.expires_at).getTime() > Date.now() + 5000;
+        } catch (e) {
+          return false;
         }
       }
 
+      // Sin tocar invites ni modales: si no hay sesión, mandamos a la UI nativa de Netlify
       document.addEventListener('DOMContentLoaded', function () {
-        // Aceptar invitación si llega con invite_token
-        var handleInvite = function() {
-          if (!window.netlifyIdentity) return;
-          if (location.hash && location.hash.indexOf('invite_token=') !== -1) {
-            window.netlifyIdentity.on('init', function(user){
-              if (!user) {
-                window.netlifyIdentity.acceptInvite()
-                  .then(function(user){
-                    if (user) redirectAfterLogin();
-                    else window.netlifyIdentity.open('login');
-                  })
-                  .catch(function(err){
-                    console.error('acceptInvite error:', err);
-                    window.netlifyIdentity.open('login');
-                  });
-              }
-            });
-          }
-          // Reabrir login si hace falta
-          window.netlifyIdentity.on && window.netlifyIdentity.on('login', redirectAfterLogin);
-          window.netlifyIdentity.on && window.netlifyIdentity.on('logout', function(){ location.reload(); });
-        };
-
-        // Esperar a que Identity esté listo
-        var waitId = setInterval(function(){
-          if (window.netlifyIdentity) {
-            clearInterval(waitId);
-            handleInvite();
-          }
-        }, 50);
+        if (!isLoggedIn()) {
+          // redirige al login/recupero nativo de Netlify en la MISMA pestaña
+          location.replace('/.netlify/identity');
+          return;
+        }
+        // Si hay sesión, dejamos que Decap CMS monte su panel en #nc-root
+        // (no hacemos init manual; el script de Decap ya auto-inicializa).
       });
     </script>
   </body>
