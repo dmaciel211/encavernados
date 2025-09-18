@@ -11,22 +11,15 @@ locale: "es"
 
 collections:
   - name: "articulos"
-    label: "Artículos"
-    label_singular: "Artículo"
+    label: "Artículos y Entrevistas"
     folder: "content/articulos"
     create: true
-    slug: "{{slug}}"
-    path: "{{slug}}/index"  # crea leaf bundle: content/articulos/slug/index.md
     fields:
-      - { label: "Título", name: "title", widget: "string" }
-      - { label: "Fecha", name: "date", widget: "datetime", format: "YYYY-MM-DDTHH:mm:ssZ" }
-      - { label: "Borrador", name: "draft", widget: "boolean", default: false }
-      - { label: "Categorías", name: "categories", widget: "list", default: [] }
-      - { label: "Etiquetas", name: "tags", widget: "list", default: [] }
-      - label: "Portada"
-        name: "cover"
-        widget: "image"
-        allow_multiple: false
-        hint: "Imagen de portada del artículo (se recomienda WebP)."
-      - { label: "Descripción (resumen)", name: "description", widget: "text", required: false }
-      - { label: "Contenido", name: "body", widget: "markdown" }
+      - {label: "Título", name: "title", widget: "string"}
+      - {label: "Autores", name: "authors", widget: "list", hint: "Elegí o agregá un autor"}
+      - {label: "Fecha", name: "date", widget: "datetime"}
+      - {label: "Categoría", name: "categories", widget: "select", options: ["articulos", "entrevistas"]}
+      - {label: "Imagen de portada", name: "cover", widget: "image", required: false}
+      - {label: "Video YouTube (ID)", name: "youtube", widget: "string", required: false}
+      - {label: "Descripción", name: "description", widget: "text", hint: "Resumen corto (máx 160 caracteres)"}
+      - {label: "Cuerpo", name: "body", widget: "markdown"}
