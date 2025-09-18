@@ -1,0 +1,9 @@
+{{/* layouts/shortcodes/avatar.html */}}
+{{ $src := .Get "src" }}
+{{ $alt := .Get "alt" | default "" }}
+{{ $img := .Page.Resources.Get $src }}
+{{ if not $img }}
+  {{ errorf "avatar: no se encontró la imagen %q como Page Resource. ¿Está en la misma carpeta que el index.md?" $src }}
+{{ end }}
+{{ $thumb := $img.Fill "400x400 webp" }}
+<img src="{{ $thumb.RelPermalink }}" alt="{{ $alt }}" width="200" height="200" loading="lazy" class="avatar">

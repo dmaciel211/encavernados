@@ -1,17 +1,173 @@
+/* ===== Encavernados — estilos propios ===== */
+
+/* Grilla responsive para Libros */
 .libros-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.2rem;
   align-items: stretch;
+  margin: 1.5rem 0;
+}
+
+/* Tarjeta de libro */
+.libro-card {
+  --card-bg: #fff;
+  --card-border: rgba(0, 0, 0, .10);
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+  --card-shadow-hover: 0 10px 24px rgba(0, 0, 0, .12);
+
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.2rem;
+  box-shadow: var(--card-shadow);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--card-shadow-hover);
+    border-color: rgba(0, 0, 0, .16);
+  }
+}
+
+/* Imagen de portada: recorte limpio y pequeño zoom al hover */
+.libro-portada {
+  width: 100%;
+  height: 320px;       /* ajustá a gusto */
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: .9rem;
+  transform: translateZ(0); /* evita blureo en algunos navegadores */
+  transition: transform .25s ease;
+
+  .libro-card:hover & {
+    transform: scale(1.02);
+  }
+}
+
+/* Tipografía y detalles */
+.libro-titulo {
+  font-size: clamp(1.05rem, 2.3vw, 1.28rem);
+  line-height: 1.25;
+  margin: .35rem 0 .25rem;
+  font-weight: 700;
+}
+
+.libro-detalle {
+  margin: .2rem 0;
+  font-size: .95rem;
+  color: #444;
+}
+
+.libro-resumen {
+  margin: .8rem 0 1rem;
+  line-height: 1.55;
+}
+
+/* Botón/enlace de acción */
+.libro-link {
+  align-self: center;
+  display: inline-block;
+  padding: .55rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  background: #222;
+  color: #fff;
+
+  &:hover { background: #444; }
+}
+
+/* Modo oscuro (si el usuario lo prefiere) */
+@media (prefers-color-scheme: dark) {
+  .libro-card {
+    --card-bg: #111417;
+    --card-border: rgba(255, 255, 255, .10);
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, .5);
+    --card-shadow-hover: 0 10px 24px rgba(0, 0, 0, .6);
+    color: #e8e8e8;
+  }
+  .libro-detalle { color: #cfcfcf; }
+  .libro-link { background: #e8e8e8; color: #111; }
+  .libro-link:hover { background: #cfcfcf; }
+}
+
+/* Ajustes de responsive finos */
+@media (max-width: 480px) {
+  .libro-portada { height: 240px; }
 }
 
 
-.libro-card{max-width:400px;margin:2rem auto;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:12px;padding:1.5rem;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.08);transition:transform .15s,box-shadow .15s}
-.libro-card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.12)}
-.libro-portada{width:100%;max-height:350px;object-fit:cover;border-radius:8px;margin-bottom:1rem}
-.libro-titulo{font-size:1.3rem;margin:.5rem 0}
-.libro-detalle{margin:.2rem 0;font-size:.95rem;color:#444}
-.libro-resumen{margin:1rem 0;line-height:1.5}
-.libro-link{display:inline-block;padding:.5rem 1rem;background:#222;color:#fff;border-radius:6px;text-decoration:none;font-weight:600}
-.libro-link:hover{background:#444}
+/* Imagen Portada */
 
+.main-image {
+  text-align: center; /* centra horizontalmente */
+  margin: 1rem auto;
+}
+
+.main-image img {
+  display: block;
+  max-width: 100%;    /* nunca se pasa del ancho de la pantalla */
+  height: auto;       /* mantiene la proporción */
+  max-width: 500px;   /* 👈 límite para que quede cuadrada sin explotar */
+  border-radius: 12px;
+}
+
+
+.team-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.team-card {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1.5rem;
+  border: 1px solid #e7e7e7;
+  border-radius: 14px;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+
+.team-card img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.team-text {
+  flex: 1;
+  text-align: left;
+}
+
+.team-text h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.3rem;
+}
+
+.team-text .role {
+  color: #777;
+  margin: 0 0 0.75rem;
+  font-size: .95rem;
+  font-style: italic;
+}
+
+/* Responsive: en mobile, foto arriba */
+@media (max-width: 768px) {
+  .team-card {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+  .team-text {
+    text-align: center;
+  }
+}
