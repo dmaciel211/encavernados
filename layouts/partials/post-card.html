@@ -1,0 +1,71 @@
+{{/* layouts/partials/post-card.html */}}
+{{- $default := .Site.Params.defaultCover | default "/media/default-cover.webp" -}}
+{{- $uploadsOnError := "" -}}
+{{- $src := "" -}}
+
+{{/* entrevistas -> thumb de YouTube si hay, si no default */}}
+{{- $cats := delimit .Params.categories " " -}}
+{{- $isInterview := in $cats "entrevistas" -}}
+
+{{- if $isInterview -}}
+  {{- with .Params.youtube -}}
+    {{- $src = printf "https://img.youtube.com/vi/%s/hqdefault.jpg" . -}}
+  {{- else -}}
+    {{- $src = $default -}}
+  {{- end -}}
+{{- else -}}
+  {{/* cover normal (resuelve recurso, /ruta o nombre suelto) */}}
+  {{- $raw := (.Params.cover | default "") | trim " \t\r\n" -}}
+  {{- if eq $raw "" -}}
+    {{- $src = $default -}}
+  {{- else -}}
+    {{- $res := or (.Page.Resources.Get $raw) (.Page.Resources.GetMatch $raw) -}}
+    {{- if $res -}}
+      {{- $thumb := $res.Resize "400x webp" -}}
+      {{- $src = $thumb.RelPermalink -}}
+    {{- else -}}
+      {{- if hasPrefix $raw "/" -}}
+        {{- $src = $raw -}}
+      {{- else -}}
+        {{- $media := printf "/media/%s" $raw -}}
+        {{- $uploads := printf "/uploads/%s" $raw -}}
+        {{- $src = $media -}}
+        {{- $uploadsOnError = $uploads -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+<article class="post-card">
+  <a class="post-card__thumb" href="{{ .RelPermalink }}">
+    {{- if ne $uploadsOnError "" -}}
+      <img src="{{ $src | relURL | safeURL }}"
+           onerror="this.onerror=null;this.src='{{ $uploadsOnError | relURL }}'"
+           alt="{{ .Title }}">
+    {{- else -}}
+      <img src="{{ $src | relURL | safeURL }}" alt="{{ .Title }}">
+    {{- end -}}
+  </a>
+
+  <div class="post-card__body">
+    <h3 class="post-card__title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+
+    <div class="post-card__meta">
+      <time datetime="{{ .Date }}">{{ .Date.Format "2006-01-02" }}</time>
+      {{ with .Params.authors }} ·
+        {{ range $i, $a := . }}
+          <a href="/authors/{{ $a | urlize }}">{{ $a }}</a>{{ if lt (add $i 1) (len .) }}, {{ end }}
+        {{ end }}
+      {{ end }}
+    </div>
+
+    {{ with .Params.description }}
+      <p class="post-card__excerpt">{{ . | truncate 160 }}</p>
+    {{ else }}
+      <p class="post-card__excerpt">{{ .Summary | truncate 160 }}</p>
+    {{ end }}
+
+    <a class="post-card__readmore" href="{{ .RelPermalink }}">Leer más →</a>
+  </div>
+</article>
+

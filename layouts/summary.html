@@ -1,0 +1,76 @@
+{{- $isHome := $.IsHome -}}
+{{- $default := .Site.Params.defaultCover | default "/media/default-cover.webp" -}}
+{{- $uploadsOnError := "" -}}
+
+<article class="post-summary {{ if $isHome }}post-summary--row{{ end }}">
+
+  {{/* Detecto entrevistas */}}
+  {{- $cats := delimit .Params.categories " " -}}
+  {{- $isInterview := in $cats "entrevistas" -}}
+
+  {{- $src := "" -}} {{/* URL final de la imagen */}}
+
+  {{- if $isInterview -}}
+    {{- with .Params.youtube -}}
+      {{- $src = printf "https://img.youtube.com/vi/%s/hqdefault.jpg" . -}}
+    {{- else -}}
+      {{- $src = $default -}}
+    {{- end -}}
+  {{- else -}}
+    {{- $raw := (.Params.cover | default "") | trim " \t\r\n" -}}
+    {{- if eq $raw "" -}}
+      {{- $src = $default -}}
+    {{- else -}}
+      {{- $res := or ($.Page.Resources.Get $raw) ($.Page.Resources.GetMatch $raw) -}}
+      {{- if $res -}}
+        {{- $thumb := $res.Resize "400x webp" -}}
+        {{- $src = $thumb.RelPermalink -}}
+      {{- else -}}
+        {{- if hasPrefix $raw "/" -}}
+          {{- $src = $raw -}}
+        {{- else -}}
+          {{- $media := printf "/media/%s" $raw -}}
+          {{- $uploads := printf "/uploads/%s" $raw -}}
+          {{- $src = $media -}}
+          {{- $uploadsOnError = $uploads -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- if hugo.IsServer -}}
+    <!-- summary debug: title="{{ .Title }}" cover="{{ .Params.cover }}" resolved="{{ $src }}" fallback="{{ $uploadsOnError }}" -->
+  {{- end -}}
+
+  <a href="{{ $.RelPermalink }}">
+    {{- if ne $uploadsOnError "" -}}
+      <img src="{{ $src | relURL | safeURL }}"
+           onerror="this.onerror=null;this.src='{{ $uploadsOnError | relURL }}'"
+           alt="{{ $.Title }}" class="post-cover">
+    {{- else -}}
+      <img src="{{ $src | relURL | safeURL }}"
+           alt="{{ $.Title }}" class="post-cover">
+    {{- end -}}
+  </a>
+
+  <div class="post-text">
+    <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+
+    {{ with .Params.authors }}
+      <p class="post-author">
+        Por
+        {{ range $i, $a := . }}
+          <a href="/authors/{{ $a | urlize }}">{{ $a }}</a>{{ if lt (add $i 1) (len .) }}, {{ end }}
+        {{ end }}
+      </p>
+    {{ end }}
+
+    {{ with .Params.description }}
+      <p class="post-description">{{ . | truncate 160 }}</p>
+    {{ else }}
+      <p class="post-description">{{ .Summary | truncate 160 }}</p>
+    {{ end }}
+
+    <a href="{{ .RelPermalink }}" class="read-more">Leer más →</a>
+  </div>
+</article>

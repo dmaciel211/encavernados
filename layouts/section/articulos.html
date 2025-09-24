@@ -1,0 +1,200 @@
+{{ define "content" }}
+<section class="post-list">
+  <h1 class="post-list__title">Artículos</h1>
+
+  <!-- Buscador -->
+  <div class="articulos-search">
+    <input id="artq" type="search" placeholder="Buscar artículos..." aria-label="Buscar artículos" />
+  </div>
+
+  <!-- Grilla donde se insertan las cards -->
+  <div id="articulos-grid" class="post-grid" aria-live="polite"></div>
+
+  <!-- Loader / estado -->
+  <div id="articulos-loader" class="loader" hidden>Cargando…</div>
+  <div id="articulos-empty" class="empty" hidden>No se encontraron resultados.</div>
+
+  <!-- Sentinel para infinite scroll -->
+  <div id="articulos-sentinel" class="sentinel" aria-hidden="true"></div>
+</section>
+
+<script>
+(function(){
+  const GRID = document.getElementById('articulos-grid');
+  const LOADER = document.getElementById('articulos-loader');
+  const EMPTY = document.getElementById('articulos-empty');
+  const SENTINEL = document.getElementById('articulos-sentinel');
+  const Q = document.getElementById('artq');
+
+  // Tamaño del “lote” a renderizar (ajustá a gusto)
+  const CHUNK = 9;
+
+  let DATA = [];
+  let filtered = [];
+  let cursor = 0;
+  let loading = false;
+
+  // Renderiza un lote más
+  function renderMore() {
+    if (loading) return;
+    loading = true;
+    LOADER.hidden = false;
+
+    const slice = filtered.slice(cursor, cursor + CHUNK);
+    slice.forEach(item => GRID.appendChild(card(item)));
+
+    cursor += slice.length;
+    LOADER.hidden = true;
+    loading = false;
+
+    // Visibilidad de vacíos
+    if (filtered.length === 0) {
+      EMPTY.hidden = false;
+    } else {
+      EMPTY.hidden = true;
+    }
+
+    // Si ya mostramos todo, dejamos el sentinel pero no pasa nada más
+  }
+
+  // Construye una card DOM (match con tu summary)
+   // Construye una card DOM (match con tu summary) — CON FALLBACK DE IMAGEN
+  function card(item) {
+    const el = document.createElement('article');
+    el.className = 'post-card';
+
+    const aThumb = document.createElement('a');
+    aThumb.className = 'post-card__thumb';
+    aThumb.href = item.permalink;
+
+    // ----- Imagen con fallback -----
+    const DEFAULT_COVER = '{{ .Site.Params.defaultCover | default "/media/default-cover.webp" }}';
+    const img = document.createElement('img');
+    img.className = 'post-cover';
+
+    const cats = (item.categories || []).map(c => (''+c).toLowerCase());
+    const isInterview = cats.includes('entrevistas');
+
+    const raw = (item.cover || '').trim();
+    let src = DEFAULT_COVER;
+
+    if (isInterview && item.youtube) {
+      // Miniatura de YouTube para entrevistas
+      src = `https://img.youtube.com/vi/${item.youtube}/hqdefault.jpg`;
+    } else if (raw) {
+      // Si viene ruta absoluta o URL, respetamos; si es nombre suelto, vamos a /media
+      if (raw.startsWith('http') || raw.startsWith('/')) src = raw;
+      else src = `/media/${raw}`;
+    }
+
+    img.src = src;
+    img.alt = item.title || '';
+
+    // Fallback extra: si era nombre suelto, probá /uploads al fallar /media; si no, caé a default
+    if (raw && !raw.startsWith('http') && !raw.startsWith('/')) {
+      img.onerror = function () {
+        this.onerror = null;
+        this.src = `/uploads/${raw}`;
+      };
+    } else {
+      img.onerror = function () {
+        this.onerror = null;
+        this.src = DEFAULT_COVER;
+      };
+    }
+
+    aThumb.appendChild(img);
+    el.appendChild(aThumb);
+    // ----- /Imagen con fallback -----
+
+    const body = document.createElement('div');
+    body.className = 'post-card__body';
+
+    const h2 = document.createElement('h2');
+    h2.className = 'post-card__title';
+    const aTitle = document.createElement('a');
+    aTitle.href = item.permalink;
+    aTitle.textContent = item.title;
+    h2.appendChild(aTitle);
+
+    const p = document.createElement('p');
+    p.className = 'post-card__excerpt';
+    p.textContent = item.summary || '';
+
+    const meta = document.createElement('div');
+    meta.className = 'post-card__meta';
+    const time = document.createElement('time');
+    time.dateTime = item.date;
+    // Maneja fechas YYYY-MM-DD o ISO
+    const d = (item.date || '').slice(0,10).split('-'); // [Y,M,D]
+    if (d.length === 3) time.textContent = `${d[2]}/${d[1]}/${d[0]}`;
+    meta.appendChild(time);
+    if (item.author) meta.appendChild(document.createTextNode(' · ' + item.author));
+
+    const more = document.createElement('a');
+    more.className = 'post-card__readmore';
+    more.href = item.permalink;
+    more.textContent = 'Leer más →';
+
+    body.appendChild(h2);
+    body.appendChild(p);
+    body.appendChild(meta);
+    body.appendChild(more);
+
+    el.appendChild(body);
+    return el;
+  }
+
+  // Filtro de búsqueda (título, resumen, autor, categorías, tags)
+  function applyFilter(q) {
+    const term = (q || '').trim().toLowerCase();
+    if (!term) {
+      filtered = DATA;
+    } else {
+      filtered = DATA.filter(it => {
+        const hay = [
+          it.title,
+          it.summary,
+          it.author || '',
+          ...(it.categories || []),
+          ...(it.tags || []),
+        ].join(' ').toLowerCase();
+        return hay.includes(term);
+      });
+    }
+    GRID.innerHTML = '';
+    cursor = 0;
+    renderMore();
+  }
+
+  // IntersectionObserver para infinite scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting && cursor < filtered.length) {
+        renderMore();
+      }
+    });
+  }, { rootMargin: '800px 0px' });
+
+  io.observe(SENTINEL);
+
+  // Eventos
+  Q.addEventListener('input', () => applyFilter(Q.value));
+
+  // Cargar JSON inicial
+  fetch('{{ "/articulos/index.json" | relURL }}', { credentials: 'same-origin' })
+    .then(r => r.json())
+    .then(json => {
+      DATA = json || [];
+      filtered = DATA;
+      renderMore();
+    })
+    .catch(err => {
+      console.error('Error cargando JSON de artículos', err);
+      LOADER.hidden = true;
+      EMPTY.hidden = false;
+      EMPTY.textContent = 'No se pudieron cargar los artículos.';
+    });
+})();
+</script>
+{{ end }}

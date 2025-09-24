@@ -5,15 +5,20 @@ baseURL = "https://encavernados.com/"
 
 defaultContentLanguage = "es"
 
+pagination.pagerSize = "3"
+
 # La sección principal (el “blog”) será /articulos
 
 [params]
   mainSections = ["articulos"]
  CSS = ["css/custom.css"]
+   defaultCover = "/media/default-cover.webp"
 
 # URLs prolijas para artículos
 [permalinks]
   articulos = "/articulos/:slug/"
+
+
 
 
 # Menú principal
@@ -63,3 +68,15 @@ defaultContentLanguage = "es"
   category = "categories"
   tag = "tags"
   author = "authors"
+
+[outputs]
+  section = ["HTML", "JSON"]
+
+[mediaTypes."application/json"]
+  suffixes = ["json"]
+
+[outputFormats.JSON]
+  mediaType    = "application/json"
+  baseName     = "index"
+  isPlainText  = true
+  notAlternative = true

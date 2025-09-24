@@ -1,5 +1,5 @@
----
-title: "Sobre nosotros"
+﻿---
+title: Sobre nosotros
 resources:
   - src: "Carlos.webp"
   - src: "Maria.webp"
@@ -14,39 +14,39 @@ resources:
     {{< avatar src="Carlos.webp" alt="Carlos Alberto Butavand" >}}
     <div class="team-text">
       <h2>Carlos Alberto Butavand</h2>
-      <p class="role">Profesor de Filosofía</p>
-      <p>Profesor de Filosofía (Instituto Dr. A. Sáenz, Lomas de Zamora). Doctorando por la UNLA. Docente en profesorados de Inicial, Primaria, Educación Física, Economía, Ciencia Política y Filosofía en la zona sur del conurbano bonaerense.</p>
-      <p>Miembro fundador de <em>Encavernados</em>, participó en los libros <em>Docta barbarie</em>, <em>De sabihondos y suicidas</em> y <em>Filosofía y poder en el horizonte del pensamiento</em>. Actualmente orienta sus investigaciones a la filosofía latinoamericana y argentina.</p>
+      <p class="role">Profesor de FilosofÃ­a</p>
+      <p>Profesor de FilosofÃ­a (Instituto Dr. A. SÃ¡enz, Lomas de Zamora). Doctorando por la UNLA. Docente en profesorados de Inicial, Primaria, EducaciÃ³n FÃ­sica, EconomÃ­a, Ciencia PolÃ­tica y FilosofÃ­a en la zona sur del conurbano bonaerense.</p>
+      <p>Miembro fundador de <em>Encavernados</em>, participÃ³ en los libros <em>Docta barbarie</em>, <em>De sabihondos y suicidas</em> y <em>FilosofÃ­a y poder en el horizonte del pensamiento</em>. Actualmente orienta sus investigaciones a la filosofÃ­a latinoamericana y argentina.</p>
     </div>
   </article>
 
   <article class="team-card">
-    {{< avatar src="Maria.webp" alt="María Meza" >}}
+    {{< avatar src="Maria.webp" alt="MarÃ­a Meza" >}}
     <div class="team-text">
-      <h2>María Meza</h2>
-      <p class="role">Profesora de Filosofía y Cs. de la Educación</p>
-      <p>Profesora de Filosofía y Ciencias de la Educación (I.S.P. Prof. Dr. A. M. Sáenz). Docente en el mismo instituto y en el Colegio Parroquial Longchamps. Actualmente directora de Acción Social en la Obra Social para la Actividad Docente.</p>
-      <p>Miembro de <em>Encavernados</em>, participó en los libros <em>De sabihondos y suicidas</em> y <em>Filosofía y poder en el horizonte del pensamiento</em>. Su interés combina práctica docente, gestión educativa y reflexión filosófica.</p>
+      <h2>MarÃ­a Meza</h2>
+      <p class="role">Profesora de FilosofÃ­a y Cs. de la EducaciÃ³n</p>
+      <p>Profesora de FilosofÃ­a y Ciencias de la EducaciÃ³n (I.S.P. Prof. Dr. A. M. SÃ¡enz). Docente en el mismo instituto y en el Colegio Parroquial Longchamps. Actualmente directora de AcciÃ³n Social en la Obra Social para la Actividad Docente.</p>
+      <p>Miembro de <em>Encavernados</em>, participÃ³ en los libros <em>De sabihondos y suicidas</em> y <em>FilosofÃ­a y poder en el horizonte del pensamiento</em>. Su interÃ©s combina prÃ¡ctica docente, gestiÃ³n educativa y reflexiÃ³n filosÃ³fica.</p>
     </div>
   </article>
 
   <article class="team-card">
-    {{< avatar src="Sebastian.webp" alt="Gerez Federico Sebastián" >}}
+    {{< avatar src="Sebastian.webp" alt="Gerez Federico SebastiÃ¡n" >}}
     <div class="team-text">
-      <h2>Gerez Federico Sebastián</h2>
-      <p class="role">Acompañamiento terapéutico · Docente</p>
-      <p>Técnico Superior en Acompañamiento Terapéutico (Hospital Interzonal Dr. José A. Esteves). Licenciante en Filosofía (UCES). Docente en la Carrera de Especialista en Psiquiatría (Facultad de Medicina, UBA). Tallerista en el Centro Comunitario “El Negro Manuel” con propuestas de filosofía y arte como herramientas terapéuticas.</p>
-      <p>Expositor en COSAPRO y en el Congreso Nacional de Filosofía (UBA). Miembro fundador de <em>Encavernados</em>. Su trabajo actual atraviesa ética, psicoanálisis y filosofía política desde una perspectiva latinoamericana.</p>
+      <h2>Gerez Federico SebastiÃ¡n</h2>
+      <p class="role">AcompaÃ±amiento terapÃ©utico Â· Docente</p>
+      <p>TÃ©cnico Superior en AcompaÃ±amiento TerapÃ©utico (Hospital Interzonal Dr. JosÃ© A. Esteves). Licenciante en FilosofÃ­a (UCES). Docente en la Carrera de Especialista en PsiquiatrÃ­a (Facultad de Medicina, UBA). Tallerista en el Centro Comunitario â€œEl Negro Manuelâ€ con propuestas de filosofÃ­a y arte como herramientas terapÃ©uticas.</p>
+      <p>Expositor en COSAPRO y en el Congreso Nacional de FilosofÃ­a (UBA). Miembro fundador de <em>Encavernados</em>. Su trabajo actual atraviesa Ã©tica, psicoanÃ¡lisis y filosofÃ­a polÃ­tica desde una perspectiva latinoamericana.</p>
     </div>
   </article>
 
   <article class="team-card">
-    {{< avatar src="Nieves.webp" alt="María Nieves Ioannu" >}}
+    {{< avatar src="Nieves.webp" alt="MarÃ­a Nieves Ioannu" >}}
     <div class="team-text">
-      <h2>María Nieves Ioannu</h2>
-      <p class="role">Profesora de Filosofía</p>
-      <p>Profesora de Filosofía (UBA). Maestranda en Estudios Culturales de América Latina en la Facultad de Filosofía y Letras (UBA). Ayudante académica en la Olimpiada Argentina de Filosofía (UBA). Docente de nivel medio en el Instituto Franciscano Nuestra Señora de las Gracias.</p>
-      <p>Integra <em>Encavernados</em>, grupo de reflexión y divulgación filosófica. Sus líneas de trabajo se orientan a los cruces entre filosofía, cultura y educación.</p>
+      <h2>MarÃ­a Nieves Ioannu</h2>
+      <p class="role">Profesora de FilosofÃ­a</p>
+      <p>Profesora de FilosofÃ­a (UBA). Maestranda en Estudios Culturales de AmÃ©rica Latina en la Facultad de FilosofÃ­a y Letras (UBA). Ayudante acadÃ©mica en la Olimpiada Argentina de FilosofÃ­a (UBA). Docente de nivel medio en el Instituto Franciscano Nuestra SeÃ±ora de las Gracias.</p>
+      <p>Integra <em>Encavernados</em>, grupo de reflexiÃ³n y divulgaciÃ³n filosÃ³fica. Sus lÃ­neas de trabajo se orientan a los cruces entre filosofÃ­a, cultura y educaciÃ³n.</p>
     </div>
   </article>
 
@@ -55,7 +55,7 @@ resources:
     <div class="team-text">
       <h2>Natalia Antelo</h2>
       <p class="role">Miembro de Encavernados</p>
-      <p>(Biografía en preparación)</p>
+      <p>(BiografÃ­a en preparaciÃ³n)</p>
     </div>
   </article>
 

@@ -1,0 +1,33 @@
+{{- $items := slice -}}
+{{- range .RegularPages.ByDate.Reverse -}}
+  {{- $author := "" -}}
+  {{- with .Params.author }}{{ $author = . }}{{ end -}}
+  {{- if not $author }}{{ with .Params.authors }}{{ $author = (delimit . ", ") }}{{ end }}{{ end -}}
+
+  {{- $sum := "" -}}
+  {{- with .Params.description }}{{ $sum = (. | plainify) }}{{ end -}}
+  {{- if not $sum }}{{ with .Summary }}{{ $sum = (. | plainify) }}{{ end }}{{ end -}}
+  {{- if not $sum }}{{ $sum = (.Plain | plainify) }}{{ end -}}
+
+  {{- $cover := "" -}}
+  {{- with .Params.cover -}}
+    {{- if (reflect.IsMap .) -}}
+      {{- with .image }}{{ $cover = (. | relURL) }}{{ end -}}
+    {{- else -}}
+      {{- $cover = (. | relURL) -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- $item := dict
+      "title" .Title
+      "permalink" .RelPermalink
+      "date" (.Date.Format "2006-01-02")
+      "author" (cond (ne $author "") $author nil)
+      "summary" ($sum | truncate 240)
+      "categories" (or .Params.categories (slice))
+      "tags" (or .Params.tags (slice))
+      "cover" (cond (ne $cover "") $cover nil)
+  -}}
+  {{- $items = $items | append $item -}}
+{{- end -}}
+{{- jsonify $items -}}
