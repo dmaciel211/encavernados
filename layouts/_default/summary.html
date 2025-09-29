@@ -1,0 +1,72 @@
+{{/* DEBUG: summary root is in use */}}
+
+
+<article class="post-summary {{ if $.IsHome }}post-summary--row{{ end }}"
+         data-summary-debug="ON">
+
+   {{/* PRIORIDAD: youtube -> cover -> default (robusto a espacios) */}}
+  {{- $default := .Site.Params.defaultCover | default "/media/default-cover.webp" -}}
+
+  {{/* youtube crudo y “limpio” (sin espacios/caracteres de control) */}}
+  {{- $ytRaw   := .Params.youtube | default "" -}}
+  {{- $ytClean := replaceRE `\s+` "" $ytRaw -}}
+
+  {{/* extraigo ID si hay algo “limpio” */}}
+  {{- $ytid := "" -}}
+  {{- if $ytClean -}}
+    {{- if hasPrefix (lower $ytClean) "http" -}}
+      {{- $ytid = replaceRE `.*(?:v=|be/|embed/)([A-Za-z0-9_-]{11}).*` "$1" $ytClean -}}
+    {{- else -}}
+      {{- $ytid = $ytClean -}}
+    {{- end -}}
+    {{- if ne (len $ytid) 11 -}}{{- $ytid = "" -}}{{- end -}}
+  {{- end -}}
+
+  {{/* cover crudo y “limpio” (sin espacios) */}}
+  {{- $coverRaw   := .Params.cover | default "" -}}
+  {{- $coverClean := replaceRE `\s+` "" $coverRaw -}}
+
+  {{/* resuelvo la URL del cover si quedó algo usable */}}
+  {{- $coverSrc := "" -}}
+  {{- if $coverClean -}}
+    {{- if or (hasPrefix (lower $coverClean) "http") (hasPrefix $coverClean "/") -}}
+      {{- $coverSrc = $coverClean -}}
+    {{- else -}}
+      {{- $coverSrc = printf "/media/%s" $coverClean -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{/* thumb final */}}
+  {{- $thumb := cond (ne $ytid "") (printf "https://img.youtube.com/vi/%s/hqdefault.jpg" $ytid) (cond (ne $coverSrc "") $coverSrc $default) -}}
+
+  <a href="{{ .RelPermalink }}">
+    <img class="post-cover"
+         src="{{ $thumb }}"
+         alt="{{ .Title }}"
+         loading="lazy"
+         onerror="this.onerror=null;this.src='{{ $default }}'">
+  </a>
+
+
+
+  <div class="post-text">
+    <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+
+    {{ with .Params.authors }}
+      <p class="post-author">
+        Por
+        {{ range $i, $a := . }}
+          <a href="/authors/{{ $a | urlize }}">{{ $a }}</a>{{ if lt (add $i 1) (len .) }}, {{ end }}
+        {{ end }}
+      </p>
+    {{ end }}
+
+    {{ with .Params.description }}
+      <p class="post-description">{{ . | truncate 160 }}</p>
+    {{ else }}
+      <p class="post-description">{{ .Summary | truncate 160 }}</p>
+    {{ end }}
+
+    <a href="{{ .RelPermalink }}" class="read-more">Leer más →</a>
+  </div>
+</article>

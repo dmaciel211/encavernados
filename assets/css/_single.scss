@@ -1,0 +1,53 @@
+/* Contenedor general */
+.single.single--articulo {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 1rem;
+  margin-top: 90px
+}
+
+/* Encabezado */
+.single-header { margin-bottom: 1rem; }
+.single-header h1 { margin: 0 0 .25rem; }
+.single-meta { font-size: .9rem; color: #777; }
+
+/* Hero contenedor */
+.single-hero {
+  margin: 1rem auto;
+  width: 100%;
+  max-width: 720px; /* ancho más chico */
+}
+
+/* Imagen hero */
+.single-hero--image .post-image {
+  display: block;
+  max-width: 100%;
+  max-height: 400px;  /* tamaño reducido */
+  margin: 0 auto;
+  object-fit: contain; /* no corta ni horizontales ni verticales */
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.1);
+}
+
+/* Video hero */
+.single-hero--video iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border: 0;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.1);
+}
+
+/* Imágenes dentro del contenido */
+.single .content img {
+  display: block;
+  margin: 1.2rem auto;
+  max-width: 90%;
+  max-height: 360px; /* más chicas que la hero */
+  height: auto;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+

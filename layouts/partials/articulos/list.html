@@ -1,0 +1,185 @@
+{{ define "content" }}
+<section class="post-list">
+  <h1 class="post-list__title">Artículos</h1>
+
+  <div class="articulos-search">
+    <input id="artq" type="search" placeholder="Buscar artículos..." aria-label="Buscar artículos" />
+  </div>
+
+  <div id="articulos-grid" class="post-grid" aria-live="polite"></div>
+
+  <div id="articulos-loader" class="loader" hidden>Cargando…</div>
+  <div id="articulos-empty" class="empty" hidden>No se encontraron resultados.</div>
+
+  <div id="articulos-sentinel" class="sentinel" aria-hidden="true"></div>
+</section>
+
+<script>
+(function(){
+  const GRID = document.getElementById('articulos-grid');
+  const LOADER = document.getElementById('articulos-loader');
+  const EMPTY = document.getElementById('articulos-empty');
+  const SENTINEL = document.getElementById('articulos-sentinel');
+  const Q = document.getElementById('artq');
+  const CHUNK = 9;
+
+  let DATA = [];
+  let filtered = [];
+  let cursor = 0;
+  let loading = false;
+
+function extractYouTubeId(s){
+  const v = (s || '').trim();
+  if (!v) return '';
+  const m = v.match(/(?:v=|be\/|embed\/)([A-Za-z0-9_-]{11})/);
+  if (m && m[1]) return m[1];
+  if (/^[A-Za-z0-9_-]{11}$/.test(v)) return v;
+  return '';
+}
+
+  function renderMore() {
+    if (loading) return;
+    loading = true;
+    LOADER.hidden = false;
+
+    const slice = filtered.slice(cursor, cursor + CHUNK);
+    slice.forEach(item => GRID.appendChild(card(item)));
+
+    cursor += slice.length;
+    LOADER.hidden = true;
+    loading = false;
+
+    EMPTY.hidden = filtered.length !== 0;
+  }
+
+  function card(item) {
+    const el = document.createElement('article');
+    el.className = 'post-card';
+
+    const cats = Array.isArray(item.categories)
+      ? item.categories.map(c => String(c).toLowerCase())
+      : (item.categories ? [String(item.categories).toLowerCase()] : []);
+
+    const aThumb = document.createElement('a');
+    aThumb.className = 'post-card__thumb';
+    aThumb.href = item.permalink;
+
+    const DEFAULT_COVER = '{{ .Site.Params.defaultCover | default "/media/default-cover.webp" }}';
+    const img = document.createElement('img');
+    img.className = 'post-cover';
+
+    const ytId = extractYouTubeId(item.youtube);
+    const raw = (item.cover || '').trim();
+    let src = DEFAULT_COVER;
+
+    if (ytId) {
+      src = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+    } else if (raw) {
+      if (raw.startsWith('http') || raw.startsWith('/')) src = raw;
+      else src = `/media/${raw}`;
+    }
+
+    img.src = src;
+    img.alt = item.title || '';
+    img.onerror = function () {
+      this.onerror = null;
+      this.src = DEFAULT_COVER;
+    };
+
+    aThumb.appendChild(img);
+    el.appendChild(aThumb);
+
+    const body = document.createElement('div');
+    body.className = 'post-card__body';
+
+    const h2 = document.createElement('h2');
+    h2.className = 'post-card__title';
+    const aTitle = document.createElement('a');
+    aTitle.href = item.permalink;
+    aTitle.textContent = item.title || '';
+    h2.appendChild(aTitle);
+
+    const p = document.createElement('p');
+    p.className = 'post-card__excerpt';
+    p.textContent = item.summary || '';
+
+    const meta = document.createElement('div');
+    meta.className = 'post-card__meta';
+    const time = document.createElement('time');
+    const iso = (item.date || '').slice(0,10);
+    time.dateTime = iso;
+    const parts = iso.split('-');
+    if (parts.length === 3) time.textContent = `${parts[2]}/${parts[1]}/${parts[0]}`;
+    meta.appendChild(time);
+    if (item.author) meta.appendChild(document.createTextNode(' · ' + item.author));
+
+    const more = document.createElement('a');
+    more.className = 'post-card__readmore';
+    more.href = item.permalink;
+    more.textContent = 'Leer más →';
+
+    body.appendChild(h2);
+    body.appendChild(p);
+    body.appendChild(meta);
+    body.appendChild(more);
+    el.appendChild(body);
+
+    return el;
+  }
+
+  function applyFilter(q) {
+    const term = (q || '').trim().toLowerCase();
+    if (!term) {
+      filtered = DATA;
+    } else {
+      filtered = DATA.filter(it => {
+        const cats = Array.isArray(it.categories) ? it.categories.join(' ') : String(it.categories || '');
+        const tags = Array.isArray(it.tags) ? it.tags.join(' ') : String(it.tags || '');
+        const hay = [
+          it.title || '',
+          it.summary || '',
+          it.author || '',
+          cats, tags
+        ].join(' ').toLowerCase();
+        return hay.includes(term);
+      });
+    }
+    GRID.innerHTML = '';
+    cursor = 0;
+    renderMore();
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting && cursor < filtered.length) {
+        renderMore();
+      }
+    });
+  }, { rootMargin: '800px 0px' });
+  io.observe(SENTINEL);
+
+  Q.addEventListener('input', () => applyFilter(Q.value));
+
+  fetch('{{ "/articulos/index.json" | absURL }}?v={{ now.Unix }}', { credentials: 'same-origin' })
+    .then(r => r.json())
+    .then(json => {
+      DATA = (json || []).map(it => ({
+        ...it,
+        categories: Array.isArray(it.categories) ? it.categories : (it.categories ? [it.categories] : []),
+        tags: Array.isArray(it.tags) ? it.tags : (it.tags ? [it.tags] : []),
+        authors: Array.isArray(it.authors) ? it.authors : (it.authors ? [it.authors] : []),
+        youtube: (it.youtube || '').trim(),
+        cover: (it.cover || '').trim(),
+      }));
+      filtered = DATA;
+      renderMore();
+    })
+    .catch(err => {
+      console.error('Error cargando JSON de artículos', err);
+      LOADER.hidden = true;
+      EMPTY.hidden = false;
+      EMPTY.textContent = 'No se pudieron cargar los artículos.';
+    });
+})();
+</script>
+{{ end }}

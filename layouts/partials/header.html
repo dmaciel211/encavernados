@@ -1,0 +1,85 @@
+{{- /* Desktop header */ -}}
+<header class="desktop print:!tw-hidden" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title tw-flex tw-items-center tw-gap-3">
+      <a href="{{ .Site.Home.RelPermalink }}" title="{{ .Site.Title }}">
+        {{ .Site.Title }}
+      </a>
+
+      {{- /* --- Social icons junto al título --- */ -}}
+      <div class="social-header tw-flex tw-gap-2 tw-ml-3">
+        {{ with .Site.Params.social.facebook }}
+          <a class="social-link" href="{{ . }}" target="_blank" rel="noopener" aria-label="Facebook">
+            {{ partial "plugin/fontawesome.html" (dict "Style" "brands" "Icon" "facebook-f") }}
+          </a>
+        {{ end }}
+        {{ with .Site.Params.social.instagram }}
+          <a class="social-link" href="{{ . }}" target="_blank" rel="noopener" aria-label="Instagram">
+            {{ partial "plugin/fontawesome.html" (dict "Style" "brands" "Icon" "instagram") }}
+          </a>
+        {{ end }}
+        {{ with .Site.Params.social.youtube }}
+          <a class="social-link" href="{{ . }}" target="_blank" rel="noopener" aria-label="YouTube">
+            {{ partial "plugin/fontawesome.html" (dict "Style" "brands" "Icon" "youtube") }}
+          </a>
+        {{ end }}
+        {{ with .Site.Params.social.email }}
+          <a class="social-link" href="{{ . }}" aria-label="Email">
+            {{ partial "plugin/fontawesome.html" (dict "Style" "solid" "Icon" "envelope") }}
+          </a>
+        {{ end }}
+      </div>
+    </div>
+
+    <div class="menu">
+      <div class="menu-inner">
+        {{- range .Site.Menus.main -}}
+          <a class="menu-item" href="{{ .URL | relLangURL }}">{{ .Name }}</a>
+        {{- end -}}
+      </div>
+    </div>
+  </div>
+</header>
+
+{{- /* Mobile header */ -}}
+<header class="mobile print:!tw-hidden" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper tw-flex tw-items-center tw-justify-between">
+      <div class="header-title tw-flex tw-items-center tw-gap-3">
+        <a href="{{ .Site.Home.RelPermalink }}" title="{{ .Site.Title }}">{{ .Site.Title }}</a>
+
+        {{- /* --- Social icons MOBILE --- */ -}}
+        <div class="social-header-mobile tw-flex tw-gap-2">
+          {{ with .Site.Params.social.facebook }}
+            <a class="social-link" href="{{ . }}" target="_blank" rel="noopener" aria-label="Facebook">
+              {{ partial "plugin/fontawesome.html" (dict "Style" "brands" "Icon" "facebook-f") }}
+            </a>
+          {{ end }}
+          {{ with .Site.Params.social.instagram }}
+            <a class="social-link" href="{{ . }}" target="_blank" rel="noopener" aria-label="Instagram">
+              {{ partial "plugin/fontawesome.html" (dict "Style" "brands" "Icon" "instagram") }}
+            </a>
+          {{ end }}
+          {{ with .Site.Params.social.youtube }}
+            <a class="social-link" href="{{ . }}" target="_blank" rel="noopener" aria-label="YouTube">
+              {{ partial "plugin/fontawesome.html" (dict "Style" "brands" "Icon" "youtube") }}
+            </a>
+          {{ end }}
+          {{ with .Site.Params.social.email }}
+            <a class="social-link" href="{{ . }}" aria-label="Email">
+              {{ partial "plugin/fontawesome.html" (dict "Style" "solid" "Icon" "envelope") }}
+            </a>
+          {{ end }}
+        </div>
+      </div>
+
+      <div class="menu-toggle" id="menu-toggle-mobile"><span></span><span></span><span></span></div>
+    </div>
+
+    <div class="menu" id="menu-mobile">
+      {{- range .Site.Menus.main -}}
+        <a class="menu-item" href="{{ .URL | relLangURL }}">{{ .Name }}</a>
+      {{- end -}}
+    </div>
+  </div>
+</header>

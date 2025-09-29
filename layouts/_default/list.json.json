@@ -1,4 +1,4 @@
-{{- $items := .RegularPages.ByDate.Reverse -}}
+{{- $items := .Pages.ByDate.Reverse -}}
 [
 {{- $first := true -}}
 {{- range $p := $items -}}
@@ -18,8 +18,8 @@
   {{- $yt := $p.Params.youtube | default "" -}}
 
   {
+    "debug": "list.json.json (local)",
     "title": {{ $p.Title | jsonify }},
-    "debug": "articulos-json-v3",  <!-- 👈 marcador -->
     "permalink": {{ $p.RelPermalink | jsonify }},
     "date": {{ $p.Date.Format "2006-01-02" | jsonify }},
     "author": {{ (delimit ($p.Params.authors | default (slice)) ", ") | jsonify }},

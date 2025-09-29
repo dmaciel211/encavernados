@@ -36,28 +36,16 @@ pagination.pagerSize = "3"
     weight = 2
 
   [[menu.main]]
-    identifier = "categorias"
-    name = "Categorías"
-    url = "/categories/"
-    weight = 3
-
-  [[menu.main]]
-    identifier = "etiquetas"
-    name = "Etiquetas"
-    url = "/tags/"
-    weight = 4
-
-  [[menu.main]]
     identifier = "libros"
     name = "Libros"
     url = "/libros/"
-    weight = 5
+    weight = 3
 
   [[menu.main]]
     identifier = "sobre"
     name = "Sobre nosotros"
     url = "/sobre/"
-    weight = 6
+    weight = 4
 
 [markup]
   [markup.goldmark]
@@ -70,7 +58,11 @@ pagination.pagerSize = "3"
   author = "authors"
 
 [outputs]
-  section = ["HTML", "JSON"]
+  home    = ["HTML", "RSS"]
+  section = ["HTML", "JSON"]   # ← importante para /articulos
+
+  
+
 
 [mediaTypes."application/json"]
   suffixes = ["json"]
@@ -80,3 +72,10 @@ pagination.pagerSize = "3"
   baseName     = "index"
   isPlainText  = true
   notAlternative = true
+
+
+  [params.social]
+facebook = "https://www.facebook.com/TUCUENTA"
+instagram = "https://www.instagram.com/TUCUENTA"
+youtube = "https://www.youtube.com/@TUCUENTA"
+email = "mailto:tucorreo@ejemplo.com"

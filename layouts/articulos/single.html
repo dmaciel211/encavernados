@@ -1,0 +1,59 @@
+{{ define "content" }}
+<article class="single single--articulo">
+
+  <!-- HEADER -->
+  <header class="single-header">
+    <h1>{{ .Title }}</h1>
+    <p class="single-meta">
+      <time datetime="{{ .Date }}">{{ .Date.Format "02/01/2006" }}</time>
+      {{ with .Params.authors }} · {{ delimit . ", " }}{{ end }}
+    </p>
+  </header>
+
+  <!-- HERO: YouTube > cover > default -->
+  {{- $default  := .Site.Params.defaultCover | default "/media/default-cover.webp" -}}
+  {{- $coverRaw := (.Params.cover | default "") | strings.TrimSpace -}}
+  {{- $ytRaw    := (.Params.youtube | default "") | strings.TrimSpace -}}
+
+  {{- $ytid := "" -}}
+  {{- if $ytRaw -}}
+    {{- if hasPrefix (lower $ytRaw) "http" -}}
+      {{- $ytid = replaceRE `.*(?:v=|be/|embed/)([A-Za-z0-9_-]{11}).*` "$1" $ytRaw -}}
+    {{- else -}}
+      {{- $ytid = $ytRaw -}}
+    {{- end -}}
+    {{- if ne (len $ytid) 11 -}}{{- $ytid = "" -}}{{- end -}}
+  {{- end -}}
+
+  {{- $src := "" -}}
+  {{- if not $ytid -}}
+    {{- if $coverRaw -}}
+      {{- if or (hasPrefix (lower $coverRaw) "http") (hasPrefix $coverRaw "/") -}}
+        {{- $src = $coverRaw -}}
+      {{- else -}}
+        {{- $src = printf "/media/%s" $coverRaw -}}
+      {{- end -}}
+    {{- else -}}
+      {{- $src = $default -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{ if $ytid }}
+    <div class="single-hero single-hero--video">
+      <iframe
+        src="{{ printf "https://www.youtube.com/embed/%s" $ytid | safeURL }}"
+        title="{{ .Title }}" loading="lazy" allowfullscreen></iframe>
+    </div>
+  {{ else if $src }}
+    <figure class="single-hero single-hero--image">
+      <img class="post-image" src="{{ $src | safeURL }}" alt="{{ .Title }}" loading="lazy" />
+    </figure>
+  {{ end }}
+
+  <!-- CONTENIDO -->
+  <div id="content" class="content">
+    {{ .Content }}
+  </div>
+
+</article>
+{{ end }}

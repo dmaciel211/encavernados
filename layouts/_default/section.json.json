@@ -1,34 +1,55 @@
-{{- $items := slice -}}
-{{- $sec := . -}} {{/* esta página es la sección */}}
-{{- range $sec.RegularPages.ByDate.Reverse -}}
-  {{- $author := "" -}}
-  {{- with .Params.author }}{{ $author = . }}{{ end -}}
-  {{- if not $author }}{{ with .Params.authors }}{{ $author = (delimit . ", ") }}{{ end }}{{ end -}}
+{{- if eq .Section "articulos" -}}
+  {{- template "articulos_json" . -}}
+{{- else -}}
+  {{- template "generic_json" . -}}
+{{- end -}}
 
-  {{- $sum := "" -}}
-  {{- with .Params.description }}{{ $sum = (. | plainify) }}{{ end -}}
-  {{- if not $sum }}{{ with .Summary }}{{ $sum = (. | plainify) }}{{ end }}{{ end -}}
-  {{- if not $sum }}{{ $sum = (.Plain | plainify) }}{{ end -}}
-
+{{- define "articulos_json" -}}
+{{- $items := .RegularPages.ByDate.Reverse -}}
+[
+{{- $first := true -}}
+{{- range $p := $items -}}
+  {{- if not $first }},{{ end -}}
+  {{- $first = false -}}
+  {{- $raw := $p.Params.cover | default "" -}}
   {{- $cover := "" -}}
-  {{- with .Params.cover -}}
-    {{- if (reflect.IsMap .) -}}
-      {{- with .image }}{{ $cover = (. | relURL) }}{{ end -}}
+  {{- if $raw -}}
+    {{- if or (hasPrefix (lower $raw) "http") (hasPrefix $raw "/") -}}
+      {{- $cover = $raw -}}
     {{- else -}}
-      {{- $cover = (. | relURL) -}}
+      {{- $cover = printf "/media/%s" $raw -}}
     {{- end -}}
   {{- end -}}
-
-  {{- $item := dict
-      "title" .Title
-      "permalink" .RelPermalink
-      "date" (.Date.Format "2006-01-02")
-      "author" (cond (ne $author "") $author nil)
-      "summary" ($sum | truncate 240)
-      "categories" (or .Params.categories (slice))
-      "tags" (or .Params.tags (slice))
-      "cover" (cond (ne $cover "") $cover nil)
-  -}}
-  {{- $items = $items | append $item -}}
+  {{- $yt := $p.Params.youtube | default "" -}}
+  {
+    "title": {{ $p.Title | jsonify }},
+    "debug": "default-section-json (articulos)",
+    "permalink": {{ $p.RelPermalink | jsonify }},
+    "date": {{ $p.Date.Format "2006-01-02" | jsonify }},
+    "author": {{ (delimit ($p.Params.authors | default (slice)) ", ") | jsonify }},
+    "categories": {{ if $p.Params.categories }}{{ $p.Params.categories | jsonify }}{{ else }}[]{{ end }},
+    "tags": {{ if $p.Params.tags }}{{ $p.Params.tags | jsonify }}{{ else }}[]{{ end }},
+    "cover": {{ if $cover }}{{ $cover | jsonify }}{{ else }}null{{ end }},
+    "youtube": {{ $yt | jsonify }},
+    "summary": {{ with $p.Params.description }}{{ . | plainify | truncate 160 | jsonify }}{{ else }}{{ $p.Summary | plainify | truncate 160 | jsonify }}{{ end }}
+  }
 {{- end -}}
-{{- jsonify $items -}}
+]
+{{- end -}}
+
+{{- define "generic_json" -}}
+{{- $items := .RegularPages.ByDate.Reverse -}}
+[
+{{- $first := true -}}
+{{- range $p := $items -}}
+  {{- if not $first }},{{ end -}}
+  {{- $first = false -}}
+  {
+    "title": {{ $p.Title | jsonify }},
+    "debug": "default-section-json (generic)",
+    "permalink": {{ $p.RelPermalink | jsonify }},
+    "date": {{ $p.Date.Format "2006-01-02" | jsonify }}
+  }
+{{- end -}}
+]
+{{- end -}}

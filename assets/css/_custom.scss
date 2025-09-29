@@ -3,3 +3,59 @@
 @import "articulos";
 @import "libros";
 @import "team";
+@import "single";
+
+
+.post-hero { margin-bottom: 1rem; }
+.post-hero__img { display:block; width:100%; height:auto; border-radius:12px; object-fit:cover; }
+.post-hero--video .post-hero__media { position:relative; width:100%; aspect-ratio:16/9; overflow:hidden; border-radius:12px; }
+.post-hero--video iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }  
+
+/* Social en header (desktop) */
+.social-header {
+  display: flex;
+  gap: .9rem;
+  margin-left: .75rem; /* o usá margin-left:auto para empujarlos a la derecha */
+
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    font-size: 1.1rem;
+    opacity: .85;
+    transition: opacity .2s ease, transform .15s ease;
+
+    &:hover { opacity: 1; transform: translateY(-1px); }
+    svg { width: 1.1em; height: 1.1em; }
+  }
+}
+
+/* Social en menú mobile */
+.social-header-mobile {
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    font-size: 1.2rem;
+    opacity: .9;
+    transition: opacity .2s ease;
+
+    &:hover { opacity: 1; }
+    svg { width: 1.2em; height: 1.2em; }
+  }
+}
+
+
+.social-header-mobile {
+  margin-left: 0.75rem; // ~12px de separación
+}
+
+.social-header-mobile a {
+  font-size: 1.1rem;   // un pelín más grande si querés
+  color: inherit;
+  transition: color .2s ease;
+}
+
+.social-header-mobile a:hover {
+  color: #e63946;
+}   
+
+
