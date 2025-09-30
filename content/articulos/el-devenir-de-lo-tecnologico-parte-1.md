@@ -4,8 +4,10 @@ authors:
   - María Meza
 date: 2025-09-24T17:27:00.000-03:00
 categories: articulos
-cover:
-description:  "De la intimidad a la <strong>extimidad</strong>: en la era tecnológica nos mostramos como marcas, bajo el imperio del like y el relato de la propia vida."
+cover: null
+description: "De la intimidad a la extimidad: en la era tecnológica nos
+  mostramos como marcas, bajo el imperio del like y el relato de la propia
+  vida."
 ---
 
 
