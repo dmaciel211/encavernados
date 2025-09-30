@@ -11,6 +11,20 @@ resources:
 <div class="team-grid">
 
   <article class="team-card">
+    {{< avatar src="Natalia.webp" alt="Verónica Natalia Antelo" >}}
+    <div class="team-text">
+      <h2>Verónica Natalia Antelo</h2>
+     <p>Profesora de enseñanza media y superior en Filosofía por la Universidad de Buenos Aires, con orientación en Filosofía Clásica. 
+    Maestranda en Estudios Clásicos y doctoranda en Filosofía por la misma universidad, Facultad de Filosofía y Letras. 
+    Es integrante del comité científico de la revista <em>Pegasus Mexicanus: De Rebus Historicis</em> y miembro del grupo de reflexión y divulgación filosófica 
+    <strong>Encavernados</strong>, con el cual participó en el libro <em>Filosofía y poder en el horizonte del pensamiento</em>. 
+    Se desempeña como profesora titular de Filosofía en nivel medio. Ha publicado artículos en revistas y libros de ciencias humanas y filosofía, 
+    y colabora en la producción de materiales audiovisuales de divulgación filosófica. 
+    Participa activamente en jornadas, congresos y exposiciones tanto a nivel nacional como internacional.</p>
+    </div>
+  </article>
+  
+  <article class="team-card">
     {{< avatar src="Carlos.webp" alt="Carlos Alberto Butavand" >}}
     <div class="team-text">
       <h2>Carlos Alberto Butavand</h2>
@@ -25,19 +39,6 @@ resources:
     </div>
   </article>
 
-  <article class="team-card">
-    {{< avatar src="Maria.webp" alt="María Meza" >}}
-    <div class="team-text">
-      <h2>María Meza</h2>
-  <p>
-    Profesora de Filosofía y Ciencias de la Educación de nivel medio y superior por el Instituto Superior del Profesorado Dr. A. M. Sáenz. 
-    Se desempeña como docente en el mismo instituto y en el Colegio Parroquial Longchamps. 
-    Además, ejerce como directora de Acción Social de la Obra Social para la Actividad Docente. 
-    Es miembro del grupo <strong>Encavernados</strong> y ha participado en los libros <em>De sabihondos y suicidas</em> y 
-    <em>Filosofía y poder en el horizonte del pensamiento</em>.
-  </p>
-    </div>
-  </article>
 
   <article class="team-card">
     {{< avatar src="Sebastian.webp" alt="Federico Sebastián Geréz" >}}
@@ -67,19 +68,20 @@ resources:
     </p>
     </div>
   </article>
-
+  
   <article class="team-card">
-    {{< avatar src="Natalia.webp" alt="Verónica Natalia Antelo" >}}
+    {{< avatar src="Maria.webp" alt="María Meza" >}}
     <div class="team-text">
-      <h2>Verónica Natalia Antelo</h2>
-     <p>Profesora de enseñanza media y superior en Filosofía por la Universidad de Buenos Aires, con orientación en Filosofía Clásica. 
-    Maestranda en Estudios Clásicos y doctoranda en Filosofía por la misma universidad, Facultad de Filosofía y Letras. 
-    Es integrante del comité científico de la revista <em>Pegasus Mexicanus: De Rebus Historicis</em> y miembro del grupo de reflexión y divulgación filosófica 
-    <strong>Encavernados</strong>, con el cual participó en el libro <em>Filosofía y poder en el horizonte del pensamiento</em>. 
-    Se desempeña como profesora titular de Filosofía en nivel medio. Ha publicado artículos en revistas y libros de ciencias humanas y filosofía, 
-    y colabora en la producción de materiales audiovisuales de divulgación filosófica. 
-    Participa activamente en jornadas, congresos y exposiciones tanto a nivel nacional como internacional.</p>
+      <h2>María Meza</h2>
+  <p>
+    Profesora de Filosofía y Ciencias de la Educación de nivel medio y superior por el Instituto Superior del Profesorado Dr. A. M. Sáenz. 
+    Se desempeña como docente en el mismo instituto y en el Colegio Parroquial Longchamps. 
+    Además, ejerce como directora de Acción Social de la Obra Social para la Actividad Docente. 
+    Es miembro del grupo <strong>Encavernados</strong> y ha participado en los libros <em>De sabihondos y suicidas</em> y 
+    <em>Filosofía y poder en el horizonte del pensamiento</em>.
+  </p>
     </div>
   </article>
+
 
 </div>
