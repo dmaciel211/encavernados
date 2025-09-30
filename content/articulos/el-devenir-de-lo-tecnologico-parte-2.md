@@ -5,9 +5,9 @@ authors:
 date: 2025-09-24T17:27:00.000-03:00
 categories: articulos
 cover: null
-description: "De la intimidad a la <strong>extimidad</strong>: en la era
-  tecnológica nos mostramos como marcas, bajo el imperio del like y el relato de
-  la propia vida."
+description: "De la intimidad a la extimidad: en la era tecnológica nos
+  mostramos como marcas, bajo el imperio del like y el relato de la propia
+  vida."
 ---
 
  <p><span style="font-weight: 400;">Y aunque piensa y muestra que &eacute;stas eran las caracter&iacute;sticas de la era que comenzaba, marca tambi&eacute;n una serie de problem&aacute;ticas: el rescate del rol individual gracias a su redefinici&oacute;n en aras de los avances tecnol&oacute;gicos, el problema del liderazgo y de la organizaci&oacute;n social y la construcci&oacute;n de un pensamiento m&aacute;s all&aacute; de las ideolog&iacute;as. Todo ello en medio de lo que Brzezinski llama </span><em><span style="font-weight: 400;">&ldquo;la paradoja de nuestra &eacute;poca&rdquo;</span></em><span style="font-weight: 400;">: esa mezcla explosiva de </span><strong>unificaci&oacute;n</strong> <span style="font-weight: 400;">(por medio de las comunicaciones) y de </span><strong>fragmentaci&oacute;n</strong> <span style="font-weight: 400;">porque se disuelven las lealtades institucionales e ideol&oacute;gicas consagradas. Lo que hemos visto manifestarse como enfrentamiento y cr&iacute;tica hacia todo tipo de instituciones establecidas: Familia, Justicia, Leyes, Estados, etc. Un mundo cada vez m&aacute;s unido y al mismo tiempo, cada vez m&aacute;s conflictuado y separado.</span></p>
