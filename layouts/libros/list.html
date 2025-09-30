@@ -1,0 +1,49 @@
+{{ define "content" }}
+<section class="libros-list container">
+  <h1>{{ .Title }}</h1>
+
+  <div class="libros-grid">
+    {{ range .Pages.ByDate.Reverse }}
+      {{ $default := "/media/default-cover.webp" }}
+      {{ $coverRaw := .Params.cover | default "" | strings.TrimSpace }}
+      {{ $res := or (.Resources.Get $coverRaw) (.Resources.GetMatch $coverRaw) }}
+      {{ $src := "" }}
+      {{ if $res }}
+        {{ $thumb := $res.Fit "600x800 webp" }}
+        {{ $src = $thumb.RelPermalink }}
+      {{ else if $coverRaw }}
+        {{ if or (hasPrefix (lower $coverRaw) "http") (hasPrefix $coverRaw "/") }}
+          {{ $src = $coverRaw }}
+        {{ else }}
+          {{ $src = (printf "/media/%s" $coverRaw) }}
+        {{ end }}
+      {{ else }}
+        {{ $src = $default }}
+      {{ end }}
+
+      <article class="libro-card">
+        <a href="{{ .RelPermalink }}">
+          <img class="libro-portada" src="{{ $src | safeURL }}" alt="Portada de {{ .Title }}">
+        </a>
+
+        <h2 class="libro-titulo"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+
+        {{ with .Params.author }}
+          <p class="libro-detalle"><strong>Autor:</strong> {{ . }}</p>
+        {{ end }}
+
+        <p class="libro-resumen">
+          {{ with .Params.description }}{{ . | truncate 220 }}{{ else }}{{ .Summary | truncate 220 }}{{ end }}
+        </p>
+
+        <div class="libro-acciones" style="display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap;">
+          <a class="libro-link" href="{{ .RelPermalink }}">Ver más →</a>
+          {{ with .Params.link }}
+            <a class="libro-link" href="{{ . }}" target="_blank" rel="noopener">Adquirir ejemplar →</a>
+          {{ end }}
+        </div>
+      </article>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

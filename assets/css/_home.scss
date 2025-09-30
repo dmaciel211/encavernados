@@ -122,3 +122,36 @@
   background: #f5f5f5;
   padding: 4px;                     /* opcional */
 }
+
+
+.home-about {
+  margin: 1.5rem 0 2rem;
+  .home-about__inner {
+    max-width: 980px; margin: 0 auto; padding: 1rem 1.25rem;
+    background: #fff; border: 1px solid #eee; border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.06);
+    h2 { margin: 0 0 .5rem; font-size: 1.25rem; }
+    p { margin: 0; line-height: 1.6; }
+  }
+}
+@media (prefers-color-scheme: light) {
+  .home-about .home-about__inner { background:#121417; border-color:#2a2f36; }
+}
+
+.home-about__inner {
+  max-width: 70ch;         /* linea cómoda */
+  margin: 0 auto;          /* centrar */
+  line-height: 1.7;        /* interlineado agradable */
+}
+
+.home-about__inner p {
+  display: block;           /* fuerza el bloque */
+  margin-top: 0;            /* por si acaso */
+  margin-bottom: 1.5rem !important; /* más espacio entre párrafos */
+  line-height: 1.6;         /* mejor legibilidad */
+}
+@media (min-width: 768px) {
+  .home-about__inner p {
+    margin-bottom: 1.5em !important;;  /* un poquito más en desktop */
+  }
+}

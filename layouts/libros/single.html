@@ -1,0 +1,52 @@
+{{ define "content" }}
+<article class="libros-single">
+
+  {{/* --- HEADER: evitar que lo tape el header fijo --- */}}
+  <header class="libros-single__header">
+    <h1 class="libros-single__title">{{ .Title }}</h1>
+  </header>
+
+  {{/* --- HERO compacto: portada pequeña + botón lateral --- */}}
+  <section class="libros-hero">
+    <div class="libros-hero__media">
+      {{- $default := "/media/default-cover.webp" -}}
+      {{- $coverRaw := .Params.cover | default "" | strings.TrimSpace -}}
+      {{- $res := or (.Resources.Get $coverRaw) (.Resources.GetMatch $coverRaw) -}}
+      {{- $src := "" -}}
+      {{- if $res -}}
+        {{- $thumb := $res.Fit "700x1000 webp" -}}
+        {{- $src = $thumb.RelPermalink -}}
+      {{- else if $coverRaw -}}
+        {{- if or (hasPrefix (lower $coverRaw) "http") (hasPrefix $coverRaw "/") -}}
+          {{- $src = $coverRaw -}}
+        {{- else -}}
+          {{- $src = (printf "/media/%s" $coverRaw) -}}
+        {{- end -}}
+      {{- else -}}
+        {{- $src = $default -}}
+      {{- end -}}
+
+      <img class="libros-hero__cover" src="{{ $src | safeURL }}" alt="Portada de {{ .Title }}" loading="lazy" />
+    </div>
+
+    <div class="libros-hero__cta">
+      {{ with .Params.author }}
+        <p class="libros-hero__meta"><strong>Autor:</strong> {{ . }}</p>
+      {{ end }}
+
+      {{ with .Params.link }}
+        <a class="btn-adquirir" href="{{ . }}" target="_blank" rel="noopener">Adquirir un ejemplar</a>
+      {{ end }}
+    </div>
+  </section>
+
+  {{/* --- CONTENIDO centrado --- */}}
+  <div id="content" class="libro-content">
+    {{ with .Params.description }}
+      <p class="libro-content__intro">{{ . }}</p>
+    {{ end }}
+
+    {{ .Content }}
+  </div>
+</article>
+{{ end }}
