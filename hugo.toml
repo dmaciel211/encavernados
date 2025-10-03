@@ -11,8 +11,13 @@ pagination.pagerSize = "3"
 
 [params]
   mainSections = ["articulos"]
- CSS = ["css/custom.css"]
-   defaultCover = "/media/default-cover.webp"
+  CSS = ["css/custom.css"]
+  defaultCover = "/media/default-cover.webp"
+  defaultTheme = "auto"   # auto respeta el sistema; usá "light" o "dark" si querés forzar
+
+[params.header]
+  themeChangeMode = "switch"   # "switch" (botón) o "select" (desplegable)
+ 
 
 # URLs prolijas para artículos
 [permalinks]
@@ -79,3 +84,5 @@ facebook = "https://www.facebook.com/TUCUENTA"
 instagram = "https://www.instagram.com/TUCUENTA"
 youtube = "https://www.youtube.com/@TUCUENTA"
 email = "mailto:tucorreo@ejemplo.com"
+
+

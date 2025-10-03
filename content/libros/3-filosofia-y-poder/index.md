@@ -1,7 +1,7 @@
 ---
 title: "Filosofía y poder en el horizonte del pensamiento"
 author: "Encavernados"
-date: 2025-08-30
+date: 2021-08-30
 cover: "portada.png"
 description: "En la búsqueda de explicar qué es el poder han regado tinta y se han involucrado distintas ramas del saber, lo que en sí mismo demuestra que es un fenómeno complejo. Ésa ambigüedad es abordada en este libro de diversas maneras por los integrantes del grupo de investigación y reflexión filosófica Encavernados, pues, como escribe en su contratapa Juan Salerno, es tarea de la filosofía hechar luz sobre él..."
 link: "mercadolibre.com"

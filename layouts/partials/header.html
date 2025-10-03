@@ -36,6 +36,11 @@
         {{- range .Site.Menus.main -}}
           <a class="menu-item" href="{{ .URL | relLangURL }}">{{ .Name }}</a>
         {{- end -}}
+
+        <!-- Botón switch de tema -->
+        <button class="menu-item theme-switch" aria-label="Cambiar tema">
+          {{ partial "plugin/fontawesome.html" (dict "Style" "solid" "Icon" "adjust") }}
+        </button>
       </div>
     </div>
   </div>
@@ -80,6 +85,11 @@
       {{- range .Site.Menus.main -}}
         <a class="menu-item" href="{{ .URL | relLangURL }}">{{ .Name }}</a>
       {{- end -}}
+
+      <!-- Switch de tema en menú mobile -->
+      <button class="menu-item theme-switch" aria-label="Cambiar tema">
+        {{ partial "plugin/fontawesome.html" (dict "Style" "solid" "Icon" "adjust") }}
+      </button>
     </div>
   </div>
 </header>

@@ -35,7 +35,7 @@
   gap: .75rem;
   border-radius: 12px;
   overflow: hidden;
-  background: var(--card-bg, #fff);
+  background: var(--card-bg, auto);
   box-shadow: 0 2px 10px rgba(0,0,0,.06);
   transition: transform .18s ease, box-shadow .18s ease;
 
@@ -47,8 +47,8 @@
   &__body { padding: .9rem 1rem 1.1rem; }
   &__title { margin: 0 0 .35rem; font-size: 1.15rem; line-height: 1.25; }
   &__title a { text-decoration: none; }
-  &__excerpt { margin: 0 0 .7rem; color: #555; line-height: 1.55; }
-  &__meta { font-size: .9rem; color: #777; margin-bottom: .6rem; }
+  &__excerpt { margin: 0 0 .7rem; color: auto; line-height: 1.55; }
+  &__meta { font-size: .9rem; color: auto; margin-bottom: .6rem; }
   &__readmore { display: inline-block; font-weight: 600; text-decoration: none; border-bottom: 2px solid currentColor; }
 }
 

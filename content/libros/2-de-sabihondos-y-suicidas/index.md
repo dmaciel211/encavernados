@@ -1,7 +1,7 @@
 ---
-title: "De Sabihondos y Suicidas"
+title: "De Sabihondos y Suicidas (2023)" 
 author: "Encavernados"
-date: 2025-08-30
+date: 2024-08-30
 cover: "portada.webp"
 description: "El tango es la apoteosis del enojo. Sus letras gruñen y ladran, patalean ofuscamientos, dispensan maldiciones y de bronca exultantes resplandecen. Usualmente, canturrean dolores que -empastados por el peso del tiempo- devienen rencor, mutan en rebeldía y, en ocasiones, modulan hasta deformarse en odios..."
 link: "mercadolibre.com"
