@@ -14,12 +14,18 @@ collections:
     label: "Artículos y Entrevistas"
     folder: "content/articulos"
     create: true
+    slug: "{{slug}}"
+    path: "{{slug}}/index"
+    filter:
+      field: "kind"
+      value: "article"
     fields:
-      - {label: "Título", name: "title", widget: "string"}
-      - {label: "Autores", name: "authors", widget: "list", field: {label: "Nombre", name: "author", widget: "string"}, hint: "Podés escribir el nombre completo"}
-      - {label: "Fecha", name: "date", widget: "datetime"}
-      - {label: "Categoría", name: "categories", widget: "select", options: ["articulos", "entrevistas"]}
-      - {label: "Imagen de portada", name: "cover", widget: "image", required: false}
-      - {label: "Video YouTube (ID o URL)", name: "youtube", widget: "string", required: false, hint: "Pegá el ID (p.ej: ki_E97HIN9A) o la URL completa"}
-      - {label: "Descripción", name: "description", widget: "text", hint: "Resumen corto (máx 160 caracteres)"}
-      - {label: "Cuerpo", name: "body", widget: "markdown"}
+      - { label: "Kind", name: "kind", widget: "hidden", default: "article" }
+      - { label: "Título", name: "title", widget: "string" }
+      - { label: "Autores", name: "authors", widget: "list", summary: "{{fields.item}}", allow_add: true }
+      - { label: "Fecha", name: "date", widget: "datetime" }
+      - { label: "Categoría", name: "categories", widget: "select", options: ["articulos", "entrevistas"] }
+      - { label: "Imagen de portada", name: "cover", widget: "image", required: false }
+      - { label: "Video YouTube (ID o URL)", name: "youtube", widget: "string", required: false, hint: "Pegá el ID (p.ej: ki_E97HIN9A) o la URL completa" }
+      - { label: "Descripción", name: "description", widget: "text", hint: "Resumen corto (máx 160 caracteres)" }
+      - { label: "Cuerpo", name: "body", widget: "markdown" }
