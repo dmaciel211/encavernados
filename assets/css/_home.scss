@@ -1,161 +1,100 @@
-/* ===========================
-   HOME — Hero + Lista
-   =========================== */
-
-/* 1) HERO full width (rompe el container del tema) */
+/* ===== HERO full-width ===== */
 .home-hero {
-  width: 100vw;               /* ocupa todo el ancho visible */
+  width: 100vw;
   position: relative;
   left: 50%;
   right: 50%;
-  margin-left: -50vw;         /* truco para salir del container */
+  margin-left: -50vw;
   margin-right: -50vw;
   margin-top: 0;
   margin-bottom: 2rem;
 }
-
 .home-hero__media img {
   display: block;
   width: 100%;
-  /* Proporción tipo banner (podés variar a 2.5/1 o 3/1) */
   aspect-ratio: 3 / 1;
   object-fit: cover;
-  border-radius: 0;           /* sin bordes para que se vea “de borde a borde” */
 }
-
-/* En mobile: que no quede demasiado “aplastado” */
 @media (max-width: 900px) {
-  .home-hero__media img {
-    aspect-ratio: 16 / 9;
-    background-color: auto;
-  }
+  .home-hero__media img { aspect-ratio: 16 / 9; }
 }
 
-/* 2) Separación entre hero y lista */
-.home .posts,
-.home .list {
-  margin-top: 1.5rem !important;
+/* ===== Artículos recientes (SIN depender de .home) ===== */
+.home-articles { margin: 1.25rem auto 2rem; }
+.home-articles > h2 {
+  margin: 0 0 .75rem;
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
 }
 
-/* 3) Tarjetas compactas en home (miniatura a la izquierda, texto a la derecha) */
-.home .post-summary {
+/* Tarjeta compacta de summary en la home */
+.home-articles .post-summary {
   display: grid !important;
-  grid-template-columns: 180px 1fr !important; /* miniatura ~180px */
+  grid-template-columns: 180px 1fr !important;
   gap: 1rem !important;
   align-items: start !important;
   padding: .6rem;
   border-radius: 10px;
   transition: transform .2s ease, box-shadow .2s ease;
 }
-
-/* Miniatura recortada y pareja */
-.home .post-summary .post-cover {
+.home-articles .post-summary .post-cover {
   width: 100% !important;
-  height: 120px !important;     /* podés subir a 140/160 si querés */
+  height: 120px !important;
   object-fit: cover !important;
   border-radius: 10px !important;
   display: block !important;
   transition: transform .25s ease;
 }
-
-/* Texto compacto */
-.home .post-summary .post-text { padding: 0 !important; }
-
-.home .post-summary .post-text h2 {
+.home-articles .post-summary .post-text { padding: 0 !important; }
+.home-articles .post-summary h2 {
   margin: 0 0 .4rem !important;
   font-size: 1.05rem !important;
   line-height: 1.3 !important;
 }
-
-.home .post-summary .post-text h2 a {
-  text-decoration: none;
-  color: inherit;
-  transition: color .2s ease;
-}
-
-.home .post-summary .post-description {
+.home-articles .post-summary .post-description {
   margin: 0 0 .6rem !important;
   font-size: .95rem !important;
-  color: auto !important;
 }
-
-.home .post-summary .post-author {
-  font-size: .86rem !important;
-  color: auto !important;
-}
-
-.home .post-summary .read-more {
-  display: inline-block;
-  margin-top: .5rem;
-  font-weight: 600;
-  transition: transform .2s ease, color .2s ease;
-}
-
-/* Hover sutil */
-@media (hover: hover) and (pointer: fine) {
-  .home .post-summary:hover {
+@media (hover:hover) and (pointer:fine) {
+  .home-articles .post-summary:hover {
     transform: translateY(-4px);
     box-shadow: 0 6px 18px rgba(0,0,0,.12);
-    background: auto;
   }
-  .home .post-summary:hover .post-cover { transform: scale(1.04); }
-  .home .post-summary:hover h2 a { color: #65a4b5; }
-  .home .post-summary:hover .read-more {
-    transform: translateX(3px);
-    color: #65a4b5;;
-  }
+  .home-articles .post-summary:hover .post-cover { transform: scale(1.04); }
 }
 
-/* 4) Responsive: en mobile, tarjeta vertical */
-@media (max-width: 600px) {
-  .home .post-summary {
-    grid-template-columns: 1fr !important;
-  }
-  .home .post-summary .post-cover {
-    height: 180px !important;
-  }
-}
-
-
-/* Home: thumbnails verticales que se vean completos */
-.home .post-summary .post-cover.is-portrait {
-  object-fit: contain !important;   /* pisa el cover anterior */
+/* Thumbnails verticales visibles completos */
+.home-articles .post-summary .post-cover.is-portrait {
+  object-fit: contain !important;
   background: #f5f5f5;
-  padding: 4px;                     /* opcional */
+  padding: 4px;
 }
 
-
-.home-about {
-  margin: 1.5rem 0 2rem;
-  .home-about__inner {
-    max-width: 980px; margin: 0 auto; padding: 1rem 1.25rem;
-    background: auto; border: 1px solid #eee; border-radius: 12px;
-    box-shadow: 0 4px 14px rgba(0,0,0,.06);
-    h2 { margin: 0 0 .5rem; font-size: 1.25rem; }
-    p { margin: 0; line-height: 1.6; }
-  }
+/* Botón “Ver más artículos” */
+.home-articles .ver-mas {
+  margin-top: .75rem;
 }
-@media (prefers-color-scheme: auto) {
-  .home-about .home-about__inner { background:auto; border-color:#2a2f36; }
+.home-articles .ver-mas a {
+  display: inline-block;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 2px solid currentColor;
 }
 
+/* ===== Sobre Encavernados ===== */
+.home-about { margin: 2rem 0; }
+.home-about h2 {
+  margin: 0 0 .75rem;
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+}
 .home-about__inner {
-  max-width: 70ch;         /* linea cómoda */
-  margin: 0 auto;          /* centrar */
-  line-height: 1.7;        /* interlineado agradable */
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 1rem 1.25rem;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.06);
 }
-
-.home-about__inner p {
-  display: block;           /* fuerza el bloque */
-  margin-top: 0;            /* por si acaso */
-  margin-bottom: 1.5rem !important; /* más espacio entre párrafos */
-  line-height: 1.6;         /* mejor legibilidad */
-}
-@media (min-width: 768px) {
-  .home-about__inner p {
-    margin-bottom: 1.5em !important;;  /* un poquito más en desktop */
-  }
-}
+.home-about__inner p { margin: 0 0 1.2rem; line-height: 1.6; }
 
 /* En mobile, que quede centrado como item del menú */
 #menu-mobile .theme-switch {

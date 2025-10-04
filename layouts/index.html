@@ -1,0 +1,51 @@
+{{ define "content" }}
+
+<!-- HERO full-width -->
+<section class="home-hero">
+  <div class="home-hero__media">
+    <picture>
+      <!-- mobile -->
+      <source srcset="/media/portadamobile.webp" media="(max-width: 768px)">
+      <!-- desktop -->
+      <img src="/media/portada.webp" alt="Encavernados">
+    </picture>
+  </div>
+</section>
+
+<!-- ARTÍCULOS RECIENTES (sin paginación) -->
+<section class="home-articles container">
+  <h2>Artículos recientes</h2>
+
+  {{ range first 3 (where .Site.RegularPages "Section" "articulos") }}
+    {{ .Render "summary" }}
+  {{ end }}
+
+  <div class="ver-mas">
+    <a href="/articulos/">Ver más artículos →</a>
+  </div>
+</section>
+
+<!-- SOBRE ENCAVERNADOS: toma el contenido del _index.md -->
+<section class="home-about">
+  <h2 class="container">Sobre Encavernados</h2>
+  <div class="home-about__inner">
+    {{ .Content }}
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Ajuste de thumbnails verticales en la home
+  document.querySelectorAll('.home .post-summary .post-cover').forEach(img => {
+    function tag() {
+      const w = img.naturalWidth || img.width;
+      const h = img.naturalHeight || img.height;
+      if (w && h && h > w) img.classList.add('is-portrait');
+    }
+    if (img.complete) tag();
+    else img.addEventListener('load', tag, { once: true });
+  });
+});
+</script>
+
+{{ end }}

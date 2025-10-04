@@ -1,3 +1,9 @@
+--- 
+Title: Contacto
+Description: "Página de contacto"
+
+---
+
 ¿Tenés una consulta, propuesta o querés sumarte? Escribinos 👇
 
 <form name="contacto" method="POST" data-netlify="true" netlify-honeypot="bot-field">
@@ -25,6 +31,8 @@
   </div>
 
   <button type="submit" class="btn">Enviar</button>
+  
+  <div data-netlify-recaptcha="true"></div>
 </form>
 
 ¿Preferís tu cliente de correo? Escribinos por mail a tucorreo@ejemplo.com<a href="mailto:tucorreo@ejemplo.com"></a>.

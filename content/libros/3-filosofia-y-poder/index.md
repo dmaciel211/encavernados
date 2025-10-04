@@ -3,7 +3,7 @@ title: "Filosofía y poder en el horizonte del pensamiento (2025)"
 author: "Encavernados"
 date: 2021-08-30
 cover: "portada.png"
-description: El presente tomo reúne diferentes trabajos y perspectivas. Las mismas toman como eje el concepto del Poder el cual es pensado desde diferentes campos de analisis."
+description: El presente tomo reúne diferentes trabajos y perspectivas. Las mismas toman como eje el concepto del Poder el cual es pensado desde diferentes campos de analisis.
 link: "https://www.mercadolibre.com.ar"
 
 ---

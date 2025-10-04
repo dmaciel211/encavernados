@@ -1,59 +1,64 @@
-<article class="post-summary {{ if $.IsHome }}post-summary--row{{ end }}">
-  {{/* -------- THUMBNAIL PRIORITY: youtube -> cover -> default -------- */}}
+{{/* layouts/_default/summary.html */}}
+<article class="post-summary">
+  {{- /* ---------- Resolución de thumbnail (YouTube > cover > default) ---------- */ -}}
   {{- $default := .Site.Params.defaultCover | default "/media/default-cover.webp" -}}
+  {{- $coverRaw := .Params.cover | default "" -}}
+  {{- $coverTrim := replaceRE `[\s\t\r\n]+` " " $coverRaw | trim " " -}}
 
-  {{- /* normalizo youtube */ -}}
-  {{- $ytRaw := ( .Params.youtube | default "" ) | replaceRE `[\s\t\r\n]+` "" | trim " " -}}
+  {{- $ytRaw := .Params.youtube | default "" -}}
+  {{- $ytTrim := replaceRE `[\s\t\r\n]+` "" $ytRaw | trim " " -}}
   {{- $ytid := "" -}}
-  {{- if $ytRaw -}}
-    {{- if hasPrefix (lower $ytRaw) "http" -}}
-      {{- $ytid = replaceRE `.*(?:v=|be/|embed/)([A-Za-z0-9_-]{11}).*` "$1" $ytRaw -}}
+  {{- if $ytTrim -}}
+    {{- if hasPrefix (lower $ytTrim) "http" -}}
+      {{- $ytid = replaceRE `.*(?:v=|be/|embed/)([A-Za-z0-9_-]{11}).*` "$1" $ytTrim -}}
     {{- else -}}
-      {{- $ytid = $ytRaw -}}
+      {{- $ytid = $ytTrim -}}
     {{- end -}}
     {{- if ne (len $ytid) 11 -}}{{- $ytid = "" -}}{{- end -}}
   {{- end -}}
 
-  {{- /* normalizo cover */ -}}
-  {{- $coverRaw := ( .Params.cover | default "" ) | replaceRE `[\s\t\r\n]+` " " | trim " " -}}
-  {{- $coverSrc := "" -}}
-  {{- if $coverRaw -}}
-    {{- if or (hasPrefix (lower $coverRaw) "http") (hasPrefix $coverRaw "/") -}}
-      {{- $coverSrc = $coverRaw -}}
+  {{- $src := "" -}}
+  {{- if $ytid -}}
+    {{- $src = printf "https://img.youtube.com/vi/%s/hqdefault.jpg" $ytid -}}
+  {{- else if $coverTrim -}}
+    {{- if or (hasPrefix (lower $coverTrim) "http") (hasPrefix $coverTrim "/") -}}
+      {{- $src = $coverTrim -}}
     {{- else -}}
-      {{- $coverSrc = printf "/media/%s" $coverRaw -}}
+      {{- $src = printf "/media/%s" $coverTrim -}}
     {{- end -}}
+  {{- else -}}
+    {{- $src = $default -}}
   {{- end -}}
 
-  {{- /* elijo la fuente final */ -}}
-  {{- $thumb := cond (ne $ytid "") (printf "https://img.youtube.com/vi/%s/hqdefault.jpg" $ytid) (cond (ne $coverSrc "") $coverSrc $default) -}}
+  {{- if $src }}
+    <a href="{{ .RelPermalink }}">
+      <img class="post-cover"
+           src="{{ $src | safeURL }}"
+           alt="{{ .Title }}"
+           loading="lazy"
+           onerror="this.onerror=null;this.src='{{ $default | safeURL }}'">
+    </a>
+  {{- end }}
 
-  <a href="{{ .RelPermalink }}">
-    <img class="post-cover"
-         src="{{ $thumb }}"
-         alt="{{ .Title }}"
-         loading="lazy"
-         onerror="this.onerror=null;this.src='{{ $default }}'"
-         data-debug-ytraw="{{ $ytRaw }}"
-         data-debug-ytid="{{ $ytid }}"
-         data-debug-coverraw="{{ $coverRaw }}"
-         data-debug-coversrc="{{ $coverSrc }}"
-         data-debug-thumb="{{ $thumb }}">
-  </a>
   <div class="post-text">
     <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+
     {{ with .Params.authors }}
-      <p class="post-author">Por
-        {{ range $i, $a := . }}
-          <a href="/authors/{{ $a | urlize }}">{{ $a }}</a>{{ if lt (add $i 1) (len .) }}, {{ end }}
-        {{ end }}
+      <p class="post-author">
+        Por
+        {{- $n := sub (len .) 1 -}}
+        {{- range $i, $a := . -}}
+          <a href="/authors/{{ $a | urlize }}">{{ $a }}</a>{{ if lt $i $n }}, {{ end }}
+        {{- end -}}
       </p>
     {{ end }}
+
     {{ with .Params.description }}
       <p class="post-description">{{ . | truncate 160 }}</p>
     {{ else }}
       <p class="post-description">{{ .Summary | truncate 160 }}</p>
     {{ end }}
+
     <a href="{{ .RelPermalink }}" class="read-more">Leer más →</a>
   </div>
 </article>

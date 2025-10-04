@@ -1,0 +1,25 @@
+{{/* Shortcode: articles
+     Uso: {{< articles title="Artículos recientes" moreText="Ver más" moreUrl="/articulos/" >}}
+*/}}
+
+{{- $title    := .Get "title"    | default "Artículos recientes" -}}
+{{- $moreText := .Get "moreText" | default "Ver más artículos" -}}
+{{- $moreUrl  := .Get "moreUrl"  | default "/articulos/" -}}
+
+<section class="home-block home-articles container">
+  <header class="home-block__header">
+    <h2 class="home-block__title">{{ $title }}</h2>
+  </header>
+
+  <div class="home-articles__list">
+    {{- /* tomamos las secciones principales definidas en params.mainSections (articulos) */ -}}
+    {{- $pages := where .Site.RegularPages "Type" "in" .Site.Params.mainSections -}}
+    {{- range first 3 (sort $pages "Date" "desc") -}}
+      {{ .Render "summary" }}
+    {{- end -}}
+  </div>
+
+  <div class="home-block__footer">
+    <a class="btn btn--primary" href="{{ $moreUrl }}">{{ $moreText }}</a>
+  </div>
+</section>
