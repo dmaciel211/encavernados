@@ -60,3 +60,28 @@
 }   
 
 
+.site-footer {
+  margin-top: 3rem;
+  padding: 1.5rem 0;
+  background: auto; /* o #222 si lo querés dark */
+  color: #555;
+  font-size: 0.95rem;
+  text-align: center;
+  border-top: 1px solid rgba(0,0,0,.08);
+}
+
+.site-footer a {
+  color: inherit;
+  text-decoration: underline;
+  transition: color .2s ease;
+}
+
+.site-footer a:hover {
+  color: #e63946; /* rojo de tu paleta */
+}
+
+.footer-credits {
+  margin-top: .3rem;
+  font-size: 0.85rem;
+  color: #888;
+}
