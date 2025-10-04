@@ -40,11 +40,7 @@
     </div>
   </section>
 
-  {{/* --- CONTENIDO centrado --- */}}
-  <div id="content" class="libro-content">
-    {{ with .Params.description }}
-      <p class="libro-content__intro">{{ . }}</p>
-    {{ end }}
+
 
     {{ .Content }}
   </div>

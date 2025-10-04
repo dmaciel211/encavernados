@@ -52,6 +52,12 @@ pagination.pagerSize = "3"
     url = "/sobre/"
     weight = 4
 
+[[menu.main]]
+  identifier = "contacto"
+  name = "Contacto"
+  url = "/contact/"
+  weight = 5
+
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]
