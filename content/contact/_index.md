@@ -27,4 +27,4 @@
   <button type="submit" class="btn">Enviar</button>
 </form>
 
-¿Preferís tu cliente de correo? Escribinos por mail tucorreo@ejemplo.com<a href="mailto:tucorreo@ejemplo.com">mail</a>.
+¿Preferís tu cliente de correo? Escribinos por mail a tucorreo@ejemplo.com<a href="mailto:tucorreo@ejemplo.com"></a>.
