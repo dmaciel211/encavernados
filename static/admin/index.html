@@ -1,12 +1,30 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-  <title>A static website</title>
-
-  <!-- include the widget -->
-  <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-   <script defer src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <meta charset="UTF-8">
+  <title>Encavernados Admin</title>
+  <!-- Netlify Identity -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <!-- Decap CMS -->
+  <script defer src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 </head>
-<body></body>
+<body>
+  <script>
+    // Redirigir después de login
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
 
+    // Capturar tokens de invitación / recuperación
+    if (window.location.hash && window.location.hash.includes("token=")) {
+      window.netlifyIdentity && window.netlifyIdentity.init();
+    }
+  </script>
+</body>
 </html>
