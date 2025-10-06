@@ -43,7 +43,7 @@ draft: false
   <button type="submit" id="enviar-btn" class="btn">Enviar</button>
   </form>
 
-  <p class="contacto-alt">También podés escribirnos a <a href="mailto:contacto@encavernados.com">contacto@encavernados.com</a>.</p>
+  <p class="contacto-alt">También podés escribirnos a <a href="mailto:encavernados@gmail.com">encavernados@gmail.com</a>.</p>
 </section>
 
 <script>
