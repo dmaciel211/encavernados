@@ -1,38 +1,62 @@
---- 
-Title: Contacto
-Description: "Página de contacto"
-
+---
+title: "Contacto"
+draft: false
 ---
 
-¿Tenés una consulta, propuesta o querés sumarte? Escribinos 👇
+<section class="contacto">
+  <h1>Contacto</h1>
 
-<form name="contacto" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-  <input type="hidden" name="form-name" value="contacto" />
-  <p class="hidden"><label>No completar: <input name="bot-field" /></label></p>
+  <form name="contacto"
+        method="POST"
+        data-netlify="true"
+        data-netlify-recaptcha="true"
+        netlify-honeypot="bot-field"
+        action="/gracias/"
+        class="contacto-form">
+
+
+  <input type="hidden" name="form-name" value="contacto">
+
+  <p class="hidden">
+      <label>No completar si sos humano:
+        <input name="bot-field">
+      </label>
+    </p>
 
   <div class="field">
-    <label for="name">Nombre</label>
-    <input id="name" name="name" type="text" required />
-  </div>
+      <label for="nombre">Nombre</label>
+      <input id="nombre" type="text" name="nombre" required>
+    </div>
 
   <div class="field">
-    <label for="email">Email</label>
-    <input id="email" name="email" type="email" required />
-  </div>
+      <label for="email">Email</label>
+      <input id="email" type="email" name="email" required>
+    </div>
 
   <div class="field">
-    <label for="subject">Asunto</label>
-    <input id="subject" name="subject" type="text" />
-  </div>
+      <label for="mensaje">Mensaje</label>
+      <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+    </div>
 
-  <div class="field">
-    <label for="message">Mensaje</label>
-    <textarea id="message" name="message" rows="6" required></textarea>
-  </div>
+  <div data-netlify-recaptcha="true" id="captcha"></div>
 
-  <button type="submit" class="btn">Enviar</button>
-  
-  <div data-netlify-recaptcha="true"></div>
-</form>
+  <button type="submit" id="enviar-btn" class="btn">Enviar</button>
+  </form>
 
-¿Preferís tu cliente de correo? Escribinos por mail a tucorreo@ejemplo.com<a href="mailto:tucorreo@ejemplo.com"></a>.
+  <p class="contacto-alt">También podés escribirnos a <a href="mailto:contacto@encavernados.com">contacto@encavernados.com</a>.</p>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.querySelector('form[name="contacto"]');
+  form.addEventListener("submit", (e) => {
+    if (window.grecaptcha && typeof grecaptcha.getResponse === "function") {
+      const response = grecaptcha.getResponse();
+      if (!response) {
+        e.preventDefault();
+        alert("Por favor confirmá el reCAPTCHA antes de enviar el mensaje.");
+      }
+    }
+  });
+});
+</script>

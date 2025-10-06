@@ -77,7 +77,6 @@ pagination.pagerSize = "3"
   notAlternative = true
 
 [params.social]
-  facebook = "https://www.facebook.com/TUCUENTA"
-  instagram = "https://www.instagram.com/TUCUENTA"
-  youtube = "https://www.youtube.com/@TUCUENTA"
-  email = "mailto:tucorreo@ejemplo.com"
+  instagram = "https://www.instagram.com/encavernados_filosofia"
+  youtube = "https://www.youtube.com/@Encavernados"
+  email = "mailto:encavernados@gmail.com"

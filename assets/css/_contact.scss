@@ -8,7 +8,7 @@
   .contacto-form {
     display: grid;
     gap: 1rem;
-    background: #fff;
+    background: auto;
     border: 1px solid #eaeaea;
     border-radius: 12px;
     padding: 1rem 1.25rem;
@@ -18,7 +18,9 @@
   .field {
     display: grid;
     gap: .35rem;
+
     label { font-weight: 600; }
+
     input, textarea {
       width: 100%;
       padding: .6rem .75rem;
@@ -26,9 +28,18 @@
       border-radius: 10px;
       font-size: 1rem;
       outline: none;
+      background: #fff;
+      color: #111;
     }
-    input:focus, textarea:focus { border-color: #aaa; }
+
+    input:focus, textarea:focus {
+      border-color: #aaa;
+      box-shadow: 0 0 0 3px rgba(0,0,0,.06);
+    }
   }
+
+  /* reCAPTCHA block */
+  #captcha { margin-top: .25rem; }
 
   .btn {
     justify-self: start;
@@ -39,16 +50,18 @@
     color: #fff;
     font-weight: 700;
     cursor: pointer;
+    transition: transform .15s ease, opacity .15s ease;
   }
+  .btn:hover { transform: translateY(-1px); opacity: .95; }
 
   .hidden { display: none !important; }
   .contacto-alt { margin-top: .75rem; color: #666; }
 }
 
 /* Dark mode amable */
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: auto) {
   .contacto .contacto-form {
-    background: #111417;
+    background: auto;
     border-color: #2a2f36;
     color: #e8e8e8;
   }
