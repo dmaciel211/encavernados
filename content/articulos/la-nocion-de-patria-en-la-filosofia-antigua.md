@@ -4,8 +4,12 @@ authors:
   - Verónica Natalia Antelo
 date: 2025-09-24T17:28:00.000-03:00
 categories: articulos
-description: 	El tema propuesto resulta demasiado extenso para un análisis sistemático. Me limitaré a poner foco en el comentario de La Ilíada, en el fragmento de Heráclito DK B44 y en la última parte del diálogo platónico el Critón, para evocar el sentimiento de la defensa de la patria. De ésta manera, se hará un recorrido desde la época arcaica hasta la Grecia Clásica.
-
+cover: /media/patri-texto-antelo.jpg
+description: El tema propuesto resulta demasiado extenso para un análisis
+  sistemático. Me limitaré a poner foco en el comentario de La Ilíada, en el
+  fragmento de Heráclito DK B44 y en la última parte del diálogo platónico el
+  Critón, para evocar el sentimiento de la defensa de la patria. De ésta manera,
+  se hará un recorrido desde la época arcaica hasta la Grecia Clásica.
 ---
 
 <p><span style="font-weight: 400;">El tema propuesto resulta demasiado extenso para un an&aacute;lisis sistem&aacute;tico. Me limitar&eacute; a poner foco en el comentario de </span><em><span style="font-weight: 400;">La Il&iacute;ada</span></em><span style="font-weight: 400;">, en el fragmento de Her&aacute;clito DK B44 y en la &uacute;ltima parte del di&aacute;logo plat&oacute;nico el </span><em><span style="font-weight: 400;">Crit&oacute;n, </span></em><span style="font-weight: 400;">para evocar el sentimiento de la defensa de la patria.</span> <span style="font-weight: 400;">De &eacute;sta manera</span><em><span style="font-weight: 400;">, </span></em><span style="font-weight: 400;">se har&aacute; un recorrido desde la &eacute;poca arcaica hasta la Grecia Cl&aacute;sica.</span></p>
