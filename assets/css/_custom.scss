@@ -118,7 +118,7 @@
 }
 .breadcrumbs a:hover { color:#000; }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: auto) {
   .breadcrumbs { color:#aaa; }
   .breadcrumbs__sep { color:#666; }
   .breadcrumbs a { border-bottom-color:#666; }
@@ -181,7 +181,7 @@
   margin-bottom: 1.2rem;
   border: 1px solid rgba(0,0,0,0.05);
   border-radius: 12px;
-  background: var(--summary-bg, #fff);
+  background: var(--summary-bg, auto);
   box-shadow: 0 6px 20px rgba(0,0,0,0.06);
   transition: transform .2s ease, box-shadow .2s ease;
 }

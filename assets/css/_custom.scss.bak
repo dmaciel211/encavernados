@@ -82,7 +82,7 @@
 }
 
 /* Modo oscuro (si el usuario lo prefiere) */
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: auto) {
   .libro-card {
     --card-bg: #111417;
     --card-border: rgba(255, 255, 255, .10);
@@ -293,7 +293,7 @@
 }
 
 /* Modo oscuro (si el usuario lo prefiere) */
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: auto) {
   .post-card {
     --card-bg: #111417;
     color: #e8e8e8;

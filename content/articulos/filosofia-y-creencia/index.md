@@ -3,7 +3,7 @@ title: Filosofia y Creencia
 authors:
   - Carlos Alberto Butavand
 date: 2025-10-07T20:09:00.000-03:00
-categories: reflexiones
+categories: articulos
 cover: /media/texto-carlos.jpg
 description: |
   “Hagamos a los otros lo que quisiéramos que hicieran por nosotros 
