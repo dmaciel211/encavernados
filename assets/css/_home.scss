@@ -20,7 +20,12 @@
 }
 
 /* ===== Artículos recientes (SIN depender de .home) ===== */
-.home-articles { margin: 1.25rem auto 2rem; }
+.home-articles {
+  max-width: var(--page-width);
+  margin: 1.25rem auto 2rem;
+  padding: 0 var(--page-pad);
+  box-sizing: border-box;
+}
 .home-articles > h2 {
   margin: 0 0 .75rem;
   font-size: clamp(1.2rem, 2vw, 1.6rem);
@@ -81,7 +86,12 @@
 }
 
 /* ===== Sobre Encavernados ===== */
-.home-about { margin: 2rem 0; }
+.home-about {
+  max-width: var(--page-width);
+  margin: 2rem auto;
+  padding: 0 var(--page-pad);
+  box-sizing: border-box;
+}
 .home-about h2 {
   margin: 0 0 .75rem;
   font-size: clamp(1.2rem, 2vw, 1.6rem);

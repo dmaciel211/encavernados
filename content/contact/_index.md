@@ -4,8 +4,6 @@ draft: false
 ---
 
 <section class="contacto">
-  <h1>Contacto</h1>
-
   <form name="contacto"
         method="POST"
         data-netlify="true"

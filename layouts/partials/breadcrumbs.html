@@ -1,0 +1,36 @@
+﻿{{- $page := . -}}
+{{- if not $page }}{{- return -}}{{- end -}}
+{{- if eq $page.Kind "home" -}}{{- return -}}{{- end -}}
+
+{{- $home := dict "title" "Inicio" "url" (relLangURL "/") -}}
+{{- $crumbs := slice $home -}}
+
+{{- $kind := $page.Kind -}}
+
+{{- if eq $kind "section" -}}
+  {{- $crumbs = $crumbs | append (dict "title" $page.Title "url" "") -}}
+{{- else if or (eq $kind "taxonomy") (eq $kind "term") -}}
+  {{- $taxonomy := strings.Title $page.Data.Plural -}}
+  {{- $crumbs = $crumbs | append (dict "title" $taxonomy "url" (printf "/%s/" $page.Data.Plural | relLangURL)) -}}
+  {{- if eq $kind "term" -}}
+    {{- $crumbs = $crumbs | append (dict "title" $page.Title "url" "") -}}
+  {{- end -}}
+{{- else -}}
+  {{- with $page.Section -}}
+    {{- $sectionURL := printf "/%s/" . | relLangURL -}}
+    {{- $sectionTitle := strings.Title . -}}
+    {{- $crumbs = $crumbs | append (dict "title" $sectionTitle "url" $sectionURL) -}}
+  {{- end -}}
+  {{- $crumbs = $crumbs | append (dict "title" $page.Title "url" "") -}}
+{{- end -}}
+
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  {{- range $i, $crumb := $crumbs -}}
+    {{- if gt $i 0 -}}<span class="breadcrumbs__sep">›</span>{{- end -}}
+    {{- if and $crumb.url (ne $crumb.url "") -}}
+      <a href="{{ $crumb.url }}">{{ $crumb.title }}</a>
+    {{- else -}}
+      <span aria-current="page">{{ $crumb.title }}</span>
+    {{- end -}}
+  {{- end -}}
+</nav>

@@ -1,0 +1,20 @@
+{{ define "baseof" -}}
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode | default "es" }}">
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body>
+  {{ partial "header.html" . }}
+
+  <main id="main">
+    {{/* BREADCRUMBS: visibles en todo el sitio salvo home */}}
+    {{ partial "breadcrumbs.html" . }}
+    {{ block "content" . }}{{ end }}
+  </main>
+
+  {{ partial "footer.html" . }}
+  {{ partial "scripts.html" . }}
+</body>
+</html>
+{{- end }}

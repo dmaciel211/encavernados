@@ -1,0 +1,19 @@
+{{ define "title" }}Sobre Nosotros - {{ .Site.Title }}{{ end }}
+
+{{ define "content" -}}
+  {{- .Page.Scratch.Set "enableTablesort" true -}}
+  {{- $params := .Scratch.Get "params" -}}
+  <div class="page single special print:!tw-w-full print:!tw-max-w-none print:!tw-m-0 print:!tw-p-0">
+    <h1>Sobre Nosotros</h1>
+
+    {{- with $params.subtitle -}}
+      <h2 class="single-subtitle">{{ . }}</h2>
+    {{- end -}}
+
+    <div class="content" id="content">
+      {{- dict "Content" .Content "Ruby" $params.ruby "Fraction" $params.fraction "Fontawesome" $params.fontawesome | partial "function/content.html" | safeHTML -}}
+    </div>
+
+    {{- partial "comment.html" . -}}
+  </div>
+{{- end -}}

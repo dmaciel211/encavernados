@@ -1,14 +1,15 @@
-:root { --safe-top: 72px; }
+﻿:root { --safe-top: 0px; }
 
 /* padding para no quedar debajo del header */
-.post-list,
-main .list,
-main .posts,
-main .post-list {
-  padding-top: var(--safe-top);
-}
+
 
 h1, h2, h3, [id] { scroll-margin-top: var(--safe-top); }
+
+h1{
+  margin-left: 0 !important;
+  margin-top: 1rem !important; 
+  text-align: left !important;
+}
 
 .main-image {
   width: 100vw;
@@ -22,3 +23,4 @@ h1, h2, h3, [id] { scroll-margin-top: var(--safe-top); }
     border-radius: 0;
   }
 }
+
