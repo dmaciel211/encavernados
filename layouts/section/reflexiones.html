@@ -1,0 +1,33 @@
+﻿{{ define "content" }}
+  {{- $target := "reflexiones" -}}
+  {{- $posts := slice -}}
+  {{- range (where .Site.RegularPages "Section" "articulos").ByDate.Reverse -}}
+    {{- $cats := .Params.categories -}}
+    {{- $typ := printf "%T" $cats -}}
+    {{- $match := false -}}
+    {{- if eq $typ "string" -}}
+      {{- $match = eq (lower (printf "%v" $cats)) $target -}}
+    {{- else if or (eq $typ "[]string") (eq $typ "[]interface {}") -}}
+      {{- range $c := $cats -}}
+        {{- if eq (lower (printf "%v" $c)) $target -}}
+          {{- $match = true -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- if $match -}}
+      {{- $posts = $posts | append . -}}
+    {{- end -}}
+  {{- end -}}
+
+  <section class="post-list">
+    <h1 class="post-list__title">Reflexiones</h1>
+
+    {{- if gt (len $posts) 0 -}}
+      {{- range $posts -}}
+        {{ .Render "summary" }}
+      {{- end -}}
+    {{- else -}}
+      <p class="empty">Todavía no hay reflexiones publicadas.</p>
+    {{- end -}}
+  </section>
+{{ end }}

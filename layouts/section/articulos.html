@@ -1,186 +1,33 @@
-{{ define "content" }}
-<section class="post-list container">
-  <h1>Artículos</h1>
+﻿{{ define "content" }}
+  {{- $target := "articulos" -}}
+  {{- $posts := slice -}}
+  {{- range (where .Site.RegularPages "Section" "articulos").ByDate.Reverse -}}
+    {{- $cats := .Params.categories -}}
+    {{- $typ := printf "%T" $cats -}}
+    {{- $match := false -}}
+    {{- if eq $typ "string" -}}
+      {{- $match = eq (lower (printf "%v" $cats)) $target -}}
+    {{- else if or (eq $typ "[]string") (eq $typ "[]interface {}") -}}
+      {{- range $c := $cats -}}
+        {{- if eq (lower (printf "%v" $c)) $target -}}
+          {{- $match = true -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- if $match -}}
+      {{- $posts = $posts | append . -}}
+    {{- end -}}
+  {{- end -}}
 
-  <!-- Buscador -->
-  <div class="articulos-search">
-    <input id="artq" type="search" placeholder="Buscar artículos..." aria-label="Buscar artículos" />
-  </div>
+  <section class="post-list">
+    <h1 class="post-list__title">Artículos</h1>
 
-  <!-- Grilla donde se insertan las cards -->
-  <div id="articulos-grid" class="post-grid" aria-live="polite"></div>
-
-  <!-- Loader / estado -->
-  <div id="articulos-loader" class="loader" hidden>Cargando…</div>
-  <div id="articulos-empty" class="empty" hidden>No se encontraron resultados.</div>
-
-  <!-- Sentinel para infinite scroll -->
-  <div id="articulos-sentinel" class="sentinel" aria-hidden="true"></div>
-</section>
-
-<script>
-(function(){
-  const GRID     = document.getElementById('articulos-grid');
-  const LOADER   = document.getElementById('articulos-loader');
-  const EMPTY    = document.getElementById('articulos-empty');
-  const SENTINEL = document.getElementById('articulos-sentinel');
-  const Q        = document.getElementById('artq');
-
-  const DEFAULT_COVER = '{{ .Site.Params.defaultCover | default "/media/default-cover.webp" }}';
-  const CHUNK = 9;
-
-  let DATA = [];
-  let filtered = [];
-  let cursor = 0;
-  let loading = false;
-
-  function extractYouTubeId(s){
-    const v = (s || '').trim();
-    if (!v) return '';
-    if (/^[A-Za-z0-9_-]{11}$/.test(v)) return v;
-    const m = v.match(/(?:v=|be\/|embed\/)([A-Za-z0-9_-]{11})/);
-    return (m && m[1]) ? m[1] : '';
-  }
-
-  function buildImageSrc(item){
-    const raw  = (item.cover || '').trim();
-    const ytId = extractYouTubeId(item.youtube);
-    if (ytId) return `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
-    if (raw)  return (raw.startsWith('http') || raw.startsWith('/')) ? raw : `/media/${raw}`;
-    return DEFAULT_COVER;
-  }
-
-  function card(item) {
-    const el = document.createElement('article');
-    el.className = 'post-card';
-
-    // ---------- Thumb ----------
-    const aThumb = document.createElement('a');
-    aThumb.className = 'post-card__thumb';
-    aThumb.href = item.permalink;
-
-    const img = new Image();
-    img.loading  = 'lazy';
-    img.decoding = 'async';
-    img.alt      = item.title || '';
-    img.onerror  = function(){
-      this.onerror = null;
-      this.src = DEFAULT_COVER;
-      this.classList.remove('is-portrait');
-    };
-
-    function checkPortrait(el){
-      try {
-        const w = el.naturalWidth  || el.width;
-        const h = el.naturalHeight || el.height;
-        if (w && h && h > w) el.classList.add('is-portrait');
-        else el.classList.remove('is-portrait');
-      } catch(e){}
-    }
-
-    img.addEventListener('load', function(){ checkPortrait(this); });
-    img.src = buildImageSrc(item);
-    if (img.complete) { setTimeout(() => checkPortrait(img), 0); } // cache case
-
-    aThumb.appendChild(img);
-    el.appendChild(aThumb);
-
-    // ---------- Body ----------
-    const body = document.createElement('div');
-    body.className = 'post-card__body';
-
-    const h2 = document.createElement('h2');
-    h2.className = 'post-card__title';
-    const aTitle = document.createElement('a');
-    aTitle.href = item.permalink;
-    aTitle.textContent = item.title || '';
-    h2.appendChild(aTitle);
-
-    const p = document.createElement('p');
-    p.className = 'post-card__excerpt';
-    p.textContent = item.summary || '';
-
-    const meta = document.createElement('div');
-    meta.className = 'post-card__meta';
-    if (item.date) {
-      const time = document.createElement('time');
-      time.dateTime = item.date;
-      const parts = (item.date || '').split('-');
-      time.textContent = (parts.length === 3) ? `${parts[2]}/${parts[1]}/${parts[0]}` : item.date;
-      meta.appendChild(time);
-    }
-    if (item.author) meta.appendChild(document.createTextNode(' · ' + item.author));
-
-    const more = document.createElement('a');
-    more.className = 'post-card__readmore';
-    more.href = item.permalink;
-    more.textContent = 'Leer más →';
-
-    body.appendChild(h2);
-    body.appendChild(p);
-    body.appendChild(meta);
-    body.appendChild(more);
-
-    el.appendChild(body);
-    return el;
-  }
-
-  function renderMore() {
-    if (loading) return;
-    loading = true;
-    LOADER.hidden = false;
-
-    const slice = filtered.slice(cursor, cursor + CHUNK);
-    slice.forEach(item => GRID.appendChild(card(item)));
-
-    cursor += slice.length;
-    LOADER.hidden = true;
-    loading = false;
-
-    EMPTY.hidden = filtered.length !== 0;
-  }
-
-  function applyFilter(q) {
-    const term = (q || '').trim().toLowerCase();
-    filtered = term
-      ? DATA.filter(it => {
-          const hay = [
-            it.title || '',
-            it.summary || '',
-            it.author || '',
-            ...(Array.isArray(it.categories) ? it.categories : []),
-            ...(Array.isArray(it.tags) ? it.tags : []),
-          ].join(' ').toLowerCase();
-          return hay.includes(term);
-        })
-      : DATA;
-
-    GRID.innerHTML = '';
-    cursor = 0;
-    renderMore();
-  }
-
-  // Infinite scroll
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting && cursor < filtered.length) renderMore();
-    });
-  }, { rootMargin: '800px 0px' });
-  io.observe(SENTINEL);
-
-  // Eventos
-  Q.addEventListener('input', () => applyFilter(Q.value));
-
-  // Traer el JSON de esta sección
-  fetch('{{ .RelPermalink }}index.json', { credentials: 'same-origin' })
-    .then(r => r.json())
-    .then(json => { DATA = json || []; filtered = DATA; renderMore(); })
-    .catch(err => {
-      console.error('Error cargando JSON de artículos', err);
-      LOADER.hidden = true;
-      EMPTY.hidden = false;
-      EMPTY.textContent = 'No se pudieron cargar los artículos.';
-    });
-})();
-</script>
+    {{- if gt (len $posts) 0 -}}
+      {{- range $posts -}}
+        {{ .Render "summary" }}
+      {{- end -}}
+    {{- else -}}
+      <p class="empty">Todavía no hay artículos publicados en esta categoría.</p>
+    {{- end -}}
+  </section>
 {{ end }}

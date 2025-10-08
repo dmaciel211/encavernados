@@ -36,22 +36,34 @@ pagination.pagerSize = "3"
     weight = 2
 
   [[menu.main]]
+    identifier = "entrevistas"
+    name = "Entrevistas"
+    url = "/entrevistas/"
+    weight = 3
+
+  [[menu.main]]
+    identifier = "reflexiones"
+    name = "Reflexiones"
+    url = "/reflexiones/"
+    weight = 4
+
+  [[menu.main]]
     identifier = "libros"
     name = "Libros"
     url = "/libros/"
-    weight = 3
+    weight = 5
 
   [[menu.main]]
     identifier = "sobre"
     name = "Sobre nosotros"
     url = "/sobre/"
-    weight = 4
+    weight = 6
 
   [[menu.main]]
     identifier = "contacto"
     name = "Contacto"
     url = "/contact/"
-    weight = 5
+    weight = 7
 
 [markup]
   [markup.goldmark]

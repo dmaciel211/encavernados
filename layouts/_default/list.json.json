@@ -1,10 +1,9 @@
-{{- $items := .Pages.ByDate.Reverse -}}
+﻿{{- $items := .Pages.ByDate.Reverse -}}
 [
 {{- $first := true -}}
 {{- range $p := $items -}}
   {{- if not $first }},{{ end -}}
   {{- $first = false -}}
-
   {{- $raw := $p.Params.cover | default "" -}}
   {{- $cover := "" -}}
   {{- if $raw -}}
@@ -14,11 +13,7 @@
       {{- $cover = printf "/media/%s" $raw -}}
     {{- end -}}
   {{- end -}}
-
-  {{- $yt := $p.Params.youtube | default "" -}}
-
   {
-    "debug": "list.json.json (local)",
     "title": {{ $p.Title | jsonify }},
     "permalink": {{ $p.RelPermalink | jsonify }},
     "date": {{ $p.Date.Format "2006-01-02" | jsonify }},
@@ -26,7 +21,7 @@
     "categories": {{ if $p.Params.categories }}{{ $p.Params.categories | jsonify }}{{ else }}[]{{ end }},
     "tags": {{ if $p.Params.tags }}{{ $p.Params.tags | jsonify }}{{ else }}[]{{ end }},
     "cover": {{ if $cover }}{{ $cover | jsonify }}{{ else }}null{{ end }},
-    "youtube": {{ $yt | jsonify }},
+    "youtube": {{ ($p.Params.youtube | default "") | jsonify }},
     "summary": {{ with $p.Params.description }}{{ . | plainify | truncate 160 | jsonify }}{{ else }}{{ $p.Summary | plainify | truncate 160 | jsonify }}{{ end }}
   }
 {{- end -}}

@@ -1,12 +1,8 @@
-{{/* layouts/_default/summary.html */}}
+﻿{{/* layouts/_default/summary.html */}}
 <article class="post-summary">
-  {{- /* ---------- Resolución de thumbnail (YouTube > cover > default) ---------- */ -}}
   {{- $default := .Site.Params.defaultCover | default "/media/default-cover.webp" -}}
-  {{- $coverRaw := .Params.cover | default "" -}}
-  {{- $coverTrim := replaceRE `[\s\t\r\n]+` " " $coverRaw | trim " " -}}
-
-  {{- $ytRaw := .Params.youtube | default "" -}}
-  {{- $ytTrim := replaceRE `[\s\t\r\n]+` "" $ytRaw | trim " " -}}
+  {{- $coverTrim := .Params.cover | default "" | strings.TrimSpace -}}
+  {{- $ytTrim := .Params.youtube | default "" | strings.TrimSpace -}}
   {{- $ytid := "" -}}
   {{- if $ytTrim -}}
     {{- if hasPrefix (lower $ytTrim) "http" -}}
@@ -14,7 +10,9 @@
     {{- else -}}
       {{- $ytid = $ytTrim -}}
     {{- end -}}
-    {{- if ne (len $ytid) 11 -}}{{- $ytid = "" -}}{{- end -}}
+    {{- if ne (len $ytid) 11 -}}
+      {{- $ytid = "" -}}
+    {{- end -}}
   {{- end -}}
 
   {{- $src := "" -}}
@@ -45,7 +43,7 @@
 
     {{ with .Params.authors }}
       <p class="post-author">
-        Por
+        Por&nbsp;
         {{- $n := sub (len .) 1 -}}
         {{- range $i, $a := . -}}
           <a href="/authors/{{ $a | urlize }}">{{ $a }}</a>{{ if lt $i $n }}, {{ end }}

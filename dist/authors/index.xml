@@ -1,0 +1,21 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Authors - Autor - Encavernados</title>
+        <link>https://encavernados.com/authors/</link>
+        <description>Authors - Autor - Encavernados</description>
+        <generator>Hugo -- gohugo.io</generator><language>es-ar</language><lastBuildDate>Tue, 07 Oct 2025 20:09:00 -0300</lastBuildDate><atom:link href="https://encavernados.com/authors/" rel="self" type="application/rss+xml" /><item>
+    <title>Carlos Alberto Butavand</title>
+    <link>https://encavernados.com/authors/carlos-alberto-butavand/</link>
+    <pubDate>Tue, 07 Oct 2025 20:09:00 -0300</pubDate><author>
+        <name>Autor</name>
+    </author><guid>https://encavernados.com/authors/carlos-alberto-butavand/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>Verónica Natalia Antelo</title>
+    <link>https://encavernados.com/authors/ver%C3%B3nica-natalia-antelo/</link>
+    <pubDate>Wed, 24 Sep 2025 17:28:00 -0300</pubDate><author>
+        <name>Autor</name>
+    </author><guid>https://encavernados.com/authors/ver%C3%B3nica-natalia-antelo/</guid>
+    <description><![CDATA[]]></description>
+</item></channel>
+</rss>
