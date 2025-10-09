@@ -1,0 +1,78 @@
+{{/* Helper partial: stores cover image data in provided Scratch key */}}
+{{- $page := .Page -}}
+{{- $cover := (.Cover | default "") | strings.TrimSpace -}}
+{{- $default := .Default | default "" -}}
+{{- $quality := printf "%v" (.Quality | default "75") -}}
+{{- $sizes := .Sizes | default "100vw" -}}
+{{- $widths := .Widths | default (slice 480 640 768 960 1200 1600 1920) -}}
+{{- $altOverride := .Alt -}}
+{{- $scratch := .Scratch -}}
+{{- $key := .Key | default "coverData" -}}
+
+{{- $resource := "" -}}
+{{- if $cover -}}
+  {{- $resource = or ($page.Resources.GetMatch $cover) ($page.Resources.Get $cover) -}}
+  {{- if not $resource -}}
+    {{- $base := path.Base $cover -}}
+    {{- $resource = or ($page.Resources.Get $base) ($page.Resources.GetMatch $base) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if $resource -}}
+  {{- $alt := or $altOverride $resource.Params.alt $resource.Title $page.Title -}}
+  {{- $webp := slice -}}
+  {{- $fallback := slice -}}
+  {{- $validWidths := slice -}}
+  {{- range $widths -}}
+    {{- if ge $resource.Width . -}}
+      {{- $validWidths = $validWidths | append . -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if eq (len $validWidths) 0 -}}
+    {{- $validWidths = slice $resource.Width -}}
+  {{- end -}}
+  {{- range $validWidths -}}
+    {{- $webpVariant := $resource.Resize (printf "%dx webp q%s" . $quality) -}}
+    {{- $fallbackVariant := $resource.Resize (printf "%dx q%s" . $quality) -}}
+    {{- $webp = $webp | append (printf "%s %dw" $webpVariant.RelPermalink .) -}}
+    {{- $fallback = $fallback | append (printf "%s %dw" $fallbackVariant.RelPermalink .) -}}
+  {{- end -}}
+  {{- $lastIndex := sub (len $validWidths) 1 -}}
+  {{- $largestWidth := index $validWidths $lastIndex -}}
+  {{- $display := $resource.Resize (printf "%dx q%s" $largestWidth $quality) -}}
+  {{- $result := dict
+      "isResource" true
+      "alt" $alt
+      "sizes" $sizes
+      "src" $display.RelPermalink
+      "srcset" (delimit $fallback ", ")
+      "srcsetWebp" (delimit $webp ", ")
+      "width" $display.Width
+      "height" $display.Height
+    -}}
+  {{- if $scratch -}}
+    {{- $_ := $scratch.Set $key $result -}}
+  {{- end -}}
+  {{- return -}}
+{{- end -}}
+
+{{- $src := "" -}}
+{{- if $cover -}}
+  {{- if or (hasPrefix (lower $cover) "http") (hasPrefix $cover "/") -}}
+    {{- $src = $cover -}}
+  {{- else -}}
+    {{- $src = printf "/media/%s" $cover -}}
+  {{- end -}}
+{{- else -}}
+  {{- $src = $default -}}
+{{- end -}}
+{{- $alt := or $altOverride $page.Title -}}
+{{- $result := dict
+    "isResource" false
+    "alt" $alt
+    "sizes" $sizes
+    "src" $src
+  -}}
+{{- if $scratch -}}
+  {{- $_ := $scratch.Set $key $result -}}
+{{- end -}}

@@ -28,17 +28,20 @@
     {{- if ne (len $ytid) 11 -}}{{- $ytid = "" -}}{{- end -}}
   {{- end -}}
 
-  {{- $src := "" -}}
+  {{- $coverData := dict -}}
+  {{- $coverKey := "cover-hero" -}}
+  {{- $_ := .Scratch.Delete $coverKey -}}
   {{- if not $ytid -}}
-    {{- if $coverRaw -}}
-      {{- if or (hasPrefix (lower $coverRaw) "http") (hasPrefix $coverRaw "/") -}}
-        {{- $src = $coverRaw -}}
-      {{- else -}}
-        {{- $src = printf "/media/%s" $coverRaw -}}
-      {{- end -}}
-    {{- else -}}
-      {{- $src = $default -}}
-    {{- end -}}
+    {{- partial "function/cover-image.html" (dict
+        "Page" .
+        "Cover" $coverRaw
+        "Default" $default
+        "Quality" 80
+        "Sizes" "(min-width: 1024px) 960px, 100vw"
+        "Scratch" .Scratch
+        "Key" $coverKey
+      ) -}}
+    {{- $coverData = .Scratch.Get $coverKey | default dict -}}
   {{- end -}}
 
   {{ if $ytid }}
@@ -47,9 +50,31 @@
         src="{{ printf "https://www.youtube.com/embed/%s" $ytid | safeURL }}"
         title="{{ .Title }}" loading="lazy" allowfullscreen></iframe>
     </div>
-  {{ else if $src }}
+  {{ else if $coverData.src }}
     <figure class="single-hero single-hero--image">
-      <img class="post-image" src="{{ $src | safeURL }}" alt="{{ .Title }}" loading="lazy" />
+      {{- if $coverData.isResource -}}
+        <picture>
+          <source type="image/webp"
+                  srcset="{{ $coverData.srcsetWebp }}"
+                  sizes="{{ $coverData.sizes }}">
+          <source srcset="{{ $coverData.srcset }}"
+                  sizes="{{ $coverData.sizes }}">
+          <img class="post-image"
+               src="{{ $coverData.src | safeURL }}"
+               srcset="{{ $coverData.srcset }}"
+               sizes="{{ $coverData.sizes }}"
+               width="{{ $coverData.width }}"
+               height="{{ $coverData.height }}"
+               alt="{{ $coverData.alt }}"
+               loading="lazy"
+               decoding="async">
+        </picture>
+      {{- else -}}
+        <img class="post-image"
+             src="{{ $coverData.src | safeURL }}"
+             alt="{{ $coverData.alt }}"
+             loading="lazy">
+      {{- end -}}
     </figure>
   {{ end }}
 

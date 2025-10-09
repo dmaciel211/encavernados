@@ -9,11 +9,11 @@
   flex-direction: row;
   align-items: flex-start;
   gap: 1.5rem;
-  border: 1px solid #e7e7e7;
+  border: 1px solid var(--enc-border);
   border-radius: 14px;
   padding: 20px;
-  background: auto;
-  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  background: var(--enc-surface);
+  box-shadow: 0 14px 28px rgba(62, 119, 135, 0.16);
 
   img {
     width: 160px;
@@ -28,7 +28,7 @@
     text-align: left;
 
     h2 { margin: 0 0 .25rem; font-size: 1.3rem; }
-    .role { color: #777; margin: 0 0 .75rem; font-size: .95rem; font-style: italic; }
+    .role { color: var(--enc-ink-soft); margin: 0 0 .75rem; font-size: .95rem; font-style: italic; }
   }
 }
 

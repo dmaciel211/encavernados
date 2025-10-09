@@ -15,26 +15,56 @@
     {{- end -}}
   {{- end -}}
 
-  {{- $src := "" -}}
-  {{- if $ytid -}}
-    {{- $src = printf "https://img.youtube.com/vi/%s/hqdefault.jpg" $ytid -}}
-  {{- else if $coverTrim -}}
-    {{- if or (hasPrefix (lower $coverTrim) "http") (hasPrefix $coverTrim "/") -}}
-      {{- $src = $coverTrim -}}
-    {{- else -}}
-      {{- $src = printf "/media/%s" $coverTrim -}}
-    {{- end -}}
-  {{- else -}}
-    {{- $src = $default -}}
+  {{- $coverData := dict -}}
+  {{- $coverKey := "summary-cover" -}}
+  {{- $_ := .Scratch.Delete $coverKey -}}
+  {{- if not $ytid -}}
+    {{- partial "function/cover-image.html" (dict
+        "Page" .
+        "Cover" $coverTrim
+        "Default" $default
+        "Quality" 75
+        "Sizes" "(min-width: 768px) 360px, 100vw"
+        "Widths" (slice 320 480 640 750 960)
+        "Scratch" .Scratch
+        "Key" $coverKey
+      ) -}}
+    {{- $coverData = .Scratch.Get $coverKey | default dict -}}
   {{- end -}}
 
-  {{- if $src }}
+  {{- if $ytid }}
     <a href="{{ .RelPermalink }}">
       <img class="post-cover"
-           src="{{ $src | safeURL }}"
+           src="{{ printf "https://img.youtube.com/vi/%s/hqdefault.jpg" $ytid | safeURL }}"
            alt="{{ .Title }}"
-           loading="lazy"
-           onerror="this.onerror=null;this.src='{{ $default | safeURL }}'">
+           loading="lazy">
+    </a>
+  {{- else if $coverData.src }}
+    <a href="{{ .RelPermalink }}">
+      {{- if $coverData.isResource -}}
+        <picture>
+          <source type="image/webp"
+                  srcset="{{ $coverData.srcsetWebp }}"
+                  sizes="{{ $coverData.sizes }}">
+          <source srcset="{{ $coverData.srcset }}"
+                  sizes="{{ $coverData.sizes }}">
+          <img class="post-cover"
+               src="{{ $coverData.src | safeURL }}"
+               srcset="{{ $coverData.srcset }}"
+               sizes="{{ $coverData.sizes }}"
+               width="{{ $coverData.width }}"
+               height="{{ $coverData.height }}"
+               alt="{{ $coverData.alt }}"
+               loading="lazy"
+               decoding="async">
+        </picture>
+      {{- else -}}
+        <img class="post-cover"
+             src="{{ $coverData.src | safeURL }}"
+             alt="{{ $coverData.alt }}"
+             loading="lazy"
+             onerror="this.onerror=null;this.src='{{ $default | safeURL }}'">
+      {{- end -}}
     </a>
   {{- end }}
 

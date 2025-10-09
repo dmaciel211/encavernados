@@ -1,0 +1,75 @@
+{{- $src := .Get "src" -}}
+{{- $alt := .Get "alt" -}}
+{{- $caption := .Get "caption" -}}
+{{- $class := .Get "class" -}}
+{{- $link := .Get "link" -}}
+{{- $loading := .Get "loading" | default "lazy" -}}
+{{- $decoding := .Get "decoding" | default "async" -}}
+{{- $quality := .Get "quality" | default "75" -}}
+{{- $sizes := .Get "sizes" | default "100vw" -}}
+
+{{- if not $src -}}
+  {{- errorf "Shortcode figura: falta el parametro obligatorio `src` en %s" .Page.File.Path -}}
+{{- end -}}
+
+{{- $resource := .Page.Resources.GetMatch $src -}}
+
+{{- if not $resource -}}
+  <figure class="figura{{ with $class }} {{ . }}{{ end }}">
+    {{- if $link -}}<a href="{{ $link }}">{{ end -}}
+      <img src="{{ $src }}" alt="{{ $alt }}" loading="{{ $loading }}" decoding="{{ $decoding }}">
+    {{- if $link -}}</a>{{ end -}}
+    {{- with $caption -}}
+      <figcaption>{{ . | markdownify }}</figcaption>
+    {{- end -}}
+  </figure>
+{{- else -}}
+  {{- $alt = or $alt $resource.Params.alt $resource.Title $resource.Name -}}
+
+  {{- $widthCandidates := slice 320 480 640 768 1024 1280 1600 1920 -}}
+  {{- $effectiveWidths := slice -}}
+  {{- range $widthCandidates -}}
+    {{- if ge $resource.Width . -}}
+      {{- $effectiveWidths = $effectiveWidths | append . -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if eq (len $effectiveWidths) 0 -}}
+    {{- $effectiveWidths = slice $resource.Width -}}
+  {{- end -}}
+
+  {{- $webpSrcset := slice -}}
+  {{- $fallbackSrcset := slice -}}
+  {{- range $effectiveWidths -}}
+    {{- $webpVariant := $resource.Resize (printf "%dx webp q%s" . $quality) -}}
+    {{- $fallbackVariant := $resource.Resize (printf "%dx q%s" . $quality) -}}
+    {{- $webpSrcset = $webpSrcset | append (printf "%s %dw" $webpVariant.RelPermalink .) -}}
+    {{- $fallbackSrcset = $fallbackSrcset | append (printf "%s %dw" $fallbackVariant.RelPermalink .) -}}
+  {{- end -}}
+
+  {{- $largestIndex := sub (len $effectiveWidths) 1 -}}
+  {{- $largestWidth := index $effectiveWidths $largestIndex -}}
+  {{- $displayImage := $resource.Resize (printf "%dx q%s" $largestWidth $quality) -}}
+  {{- $mediaType := printf "%s/%s" $resource.MediaType.Type $resource.MediaType.SubType -}}
+
+  <figure class="figura{{ with $class }} {{ . }}{{ end }}">
+    {{- if $link -}}<a href="{{ $link }}">{{ end -}}
+      <picture>
+        <source type="image/webp" srcset="{{ delimit $webpSrcset ", " }}" sizes="{{ $sizes }}">
+        <source type="{{ $mediaType }}" srcset="{{ delimit $fallbackSrcset ", " }}" sizes="{{ $sizes }}">
+        <img
+          src="{{ $displayImage.RelPermalink }}"
+          srcset="{{ delimit $fallbackSrcset ", " }}"
+          sizes="{{ $sizes }}"
+          alt="{{ $alt }}"
+          loading="{{ $loading }}"
+          decoding="{{ $decoding }}"
+          width="{{ $displayImage.Width }}"
+          height="{{ $displayImage.Height }}"
+        >
+      </picture>
+    {{- if $link -}}</a>{{ end -}}
+    {{- with $caption -}}
+      <figcaption>{{ . | markdownify }}</figcaption>
+    {{- end -}}
+  </figure>
+{{- end -}}

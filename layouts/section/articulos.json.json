@@ -5,17 +5,28 @@
   {{- if not $first }},{{ end -}}
   {{- $first = false -}}
 
-  {{- $raw := $p.Params.cover | default "" -}}
+  {{- $raw := ($p.Params.cover | default "") | strings.TrimSpace -}}
+  {{- $default := $p.Site.Params.defaultCover | default "/media/default-cover.webp" -}}
+  {{- $yt := ($p.Params.youtube | default "") | strings.TrimSpace -}}
+  {{- $key := "cover-json" -}}
+  {{- $_ := $p.Scratch.Delete $key -}}
+  {{- partial "function/cover-image.html" (dict
+      "Page" $p
+      "Cover" $raw
+      "Default" $default
+      "Quality" 70
+      "Sizes" "(min-width: 768px) 320px, 100vw"
+      "Widths" (slice 320 480 640 800)
+      "Scratch" $p.Scratch
+      "Key" $key
+    ) -}}
+  {{- $coverData := $p.Scratch.Get $key | default dict -}}
   {{- $cover := "" -}}
-  {{- if $raw -}}
-    {{- if or (hasPrefix (lower $raw) "http") (hasPrefix $raw "/") -}}
-      {{- $cover = $raw -}}
-    {{- else -}}
-      {{- $cover = printf "/media/%s" $raw -}}
-    {{- end -}}
+  {{- if $yt -}}
+    {{- $cover = $yt -}}
+  {{- else if $coverData.src -}}
+    {{- $cover = $coverData.src -}}
   {{- end -}}
-
-  {{- $yt := $p.Params.youtube | default "" -}}
 
   {
     "title": {{ $p.Title | jsonify }},
