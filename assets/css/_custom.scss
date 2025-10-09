@@ -128,6 +128,54 @@ input[type="button"]:hover,
   color: var(--enc-hover);
 }   
 
+#header-mobile .header-container .header-wrapper {
+  align-items: center;
+}
+
+#header-mobile .header-container .header-wrapper .header-title {
+  flex: 1 1 auto;
+  max-width: 100%;
+  min-width: 0;
+}
+
+#header-mobile .header-container .header-wrapper #menu-toggle-mobile {
+  flex: 0 0 auto;
+  margin-left: 0.75rem;
+}
+
+@media only screen and (max-width: 920px) {
+  #header-desktop {
+    display: none;
+  }
+
+  #header-mobile {
+    display: block;
+  }
+}
+
+@media only screen and (min-width: 921px) {
+  #header-desktop {
+    display: block;
+  }
+
+  #header-mobile {
+    display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  #header-mobile .header-container .header-wrapper .header-title {
+    flex-wrap: wrap;
+    gap: 0.35rem 0.6rem;
+  }
+
+  #header-mobile .header-container .header-wrapper .header-title .social-header-mobile {
+    flex-basis: 100%;
+    justify-content: flex-start;
+    margin-top: 0.2rem;
+  }
+}
+
 
 .menu-item.theme-switch {
   background: transparent;
@@ -297,6 +345,7 @@ body[theme="dark"] .menu-item.theme-switch:focus-visible {
   background: var(--enc-surface);
   box-shadow: var(--enc-shadow);
   transition: transform .2s ease, box-shadow .2s ease;
+  cursor: pointer;
 }
 
 .post-list .post-summary .post-cover {

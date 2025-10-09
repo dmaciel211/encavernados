@@ -7,9 +7,36 @@
 }
 
 /* Encabezado */
-.single-header { margin-bottom: 1rem; }
+.single-header {
+  margin-bottom: 1rem;
+  background: transparent;
+  box-shadow: none;
+}
+.single-header:hover {
+  background: transparent;
+  box-shadow: none;
+}
 .single-header h1 { margin: 0 0 .25rem; }
-.single-meta { font-size: .9rem; color: var(--enc-ink-soft); }
+.single-meta { font-size: .9rem; color: var(--enc-ink-soft); cursor: default; }
+.single-header * {
+  text-decoration: none;
+}
+.single-header h1,
+.single-header h1:hover {
+  color: var(--enc-ink);
+  text-decoration: none;
+  cursor: default;
+}
+.single-meta a {
+  color: var(--enc-primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+.single-meta a:hover {
+  color: var(--enc-hover);
+  text-decoration: underline;
+  cursor: pointer;
+}
 
 /* Hero contenedor */
 .single-hero {

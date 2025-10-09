@@ -1,5 +1,5 @@
 ﻿{{/* layouts/_default/summary.html */}}
-<article class="post-summary">
+<article class="post-summary" data-href="{{ .RelPermalink }}" role="link" tabindex="0" aria-label="{{ .Title }}">
   {{- $default := .Site.Params.defaultCover | default "/media/default-cover.webp" -}}
   {{- $coverTrim := .Params.cover | default "" | strings.TrimSpace -}}
   {{- $ytTrim := .Params.youtube | default "" | strings.TrimSpace -}}
@@ -93,6 +93,53 @@
       <p class="post-description">{{ .Summary | truncate 160 }}</p>
     {{ end }}
 
-    <a href="{{ .RelPermalink }}" class="read-more">Leer más →</a>
+    <a href="{{ .RelPermalink }}" class="read-more">Leer m&aacute;s &rarr;</a>
   </div>
 </article>
+
+{{- $scratch := .Page.Scratch -}}
+{{- if and $scratch (not ($scratch.Get "card-click-handler")) -}}
+  {{- $scratch.Set "card-click-handler" true -}}
+  <script>
+    (function () {
+      var selectors = ['.post-card', '.post-summary'];
+
+      function findCard(element) {
+        for (var i = 0; i < selectors.length; i++) {
+          var card = element.closest(selectors[i]);
+          if (card) return card;
+        }
+        return null;
+      }
+
+      function navigate(card, event) {
+        if (!card) return;
+        var href = card.dataset ? card.dataset.href : card.getAttribute('data-href');
+        if (!href) return;
+        if (event && (event.metaKey || event.ctrlKey || event.shiftKey)) {
+          window.open(href, '_blank');
+        } else {
+          window.location.href = href;
+        }
+      }
+
+      document.addEventListener('click', function (event) {
+        var card = findCard(event.target);
+        if (!card) return;
+        if (event.target.closest('.post-card__authors') || event.target.closest('.post-summary__authors')) return;
+        if (event.target.closest('a')) return;
+        event.preventDefault();
+        navigate(card, event);
+      });
+
+      document.addEventListener('keydown', function (event) {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        var card = findCard(event.target);
+        if (!card) return;
+        if (event.target.closest('.post-card__authors') || event.target.closest('.post-summary__authors')) return;
+        event.preventDefault();
+        navigate(card, event);
+      });
+    })();
+  </script>
+{{- end -}}

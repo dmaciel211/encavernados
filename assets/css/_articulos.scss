@@ -31,6 +31,8 @@
 /* Card base */
 .post-card {
   display: grid;
+  cursor: pointer;
+  cursor: pointer;
   grid-template-rows: auto 1fr;
   gap: .75rem;
   border-radius: 12px;
@@ -48,14 +50,14 @@
 
   &__body { padding: .9rem 1rem 1.1rem; }
   &__title { margin: 0 0 .35rem; font-size: 1.15rem; line-height: 1.25; }
-  &__title a { text-decoration: none; color: inherit; transition: color .2s ease; }
+  &__title a { text-decoration: none; color: var(--enc-ink); transition: color .2s ease; }
   &__title a:hover { color: var(--enc-hover); }
   &__excerpt { margin: 0 0 .7rem; color: var(--enc-ink-soft); line-height: 1.55; }
   &__meta { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; font-size: .9rem; color: var(--enc-ink-soft); margin-bottom: .65rem; }
   &__date { display: inline-flex; align-items: center; gap: .25rem; color: var(--enc-ink); font-weight: 100; }
   &__date time { font-weight: 100; }
   &__meta-sep { color: var(--enc-border); }
-  &__authors { display: inline-flex; align-items: center; gap: .25rem; flex-wrap: wrap; }
+  &__authors { display: inline-flex; align-items: center; gap: .25rem; flex-wrap: wrap; cursor: auto; }
   &__authors a { color: var(--enc-primary); text-decoration: none; font-weight: 600; }
   &__authors a:hover { color: var(--enc-hover); text-decoration: underline; }
   &__readmore { display: inline-block; font-weight: 600; text-decoration: none; border-bottom: 2px solid currentColor; color: var(--enc-primary); transition: color .2s ease; }
@@ -117,6 +119,7 @@
   gap: .25rem;
   flex-wrap: wrap;
   align-items: center;
+  cursor: auto;
 }
 
 .post-summary__authors a {
@@ -145,3 +148,6 @@
   .post-card__title { font-size: 1.05rem; }
   .post-card__excerpt { font-size: .98rem; }
 }
+
+
+

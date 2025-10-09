@@ -18,7 +18,8 @@
 {{- else -}}
   {{- with $page.Section -}}
     {{- $sectionURL := printf "/%s/" . | relLangURL -}}
-    {{- $sectionTitle := strings.Title . -}}
+    {{- $sectionPage := site.GetPage (printf "/%s" .) -}}
+    {{- $sectionTitle := cond $sectionPage $sectionPage.Title (strings.Title .) -}}
     {{- $crumbs = $crumbs | append (dict "title" $sectionTitle "url" $sectionURL) -}}
   {{- end -}}
   {{- $crumbs = $crumbs | append (dict "title" $page.Title "url" "") -}}

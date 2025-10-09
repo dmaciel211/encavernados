@@ -1,4 +1,4 @@
-{{- $page := .Page -}}
+﻿{{- $page := .Page -}}
 {{- $title := .Title | default $page.Title -}}
 {{- $keySource := .Key | default $page.Section -}}
 {{- $key := anchorize (printf "%v" (default "feed" $keySource)) -}}
@@ -111,6 +111,27 @@
   function card(item) {
     const article = document.createElement('article');
     article.className = 'post-card';
+    const permalink = item.permalink || '#';
+    article.dataset.href = permalink;
+    article.setAttribute('tabindex', '0');
+    article.setAttribute('role', 'link');
+    if (item.title) {
+      article.setAttribute('aria-label', item.title);
+    }
+
+    function handleCardActivate(event) {
+      if (event.target.closest('.post-card__authors') || event.target.closest('.post-summary__authors')) return;
+      if (event.target.closest('a')) return;
+      if (event.type === 'keydown' && event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      if (event.metaKey || event.ctrlKey || event.shiftKey) {
+        window.open(permalink, '_blank');
+      } else {
+        window.location.href = permalink;
+      }
+    }
+    article.addEventListener('click', handleCardActivate);
+    article.addEventListener('keydown', handleCardActivate);
 
     const thumbLink = document.createElement('a');
     thumbLink.className = 'post-card__thumb';
@@ -215,7 +236,7 @@
     const more = document.createElement('a');
     more.className = 'post-card__readmore';
     more.href = item.permalink || '#';
-    more.textContent = 'Leer más →';
+    more.textContent = 'Leer m\u00E1s \u2192';
 
     body.appendChild(titleEl);
     body.appendChild(excerpt);
@@ -329,3 +350,6 @@
     });
 })();
 </script>
+
+
+
