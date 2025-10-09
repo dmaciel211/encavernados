@@ -30,7 +30,46 @@
     "title": {{ $p.Title | jsonify }},
     "permalink": {{ $p.RelPermalink | jsonify }},
     "date": {{ $p.Date.Format "2006-01-02" | jsonify }},
-    "author": {{ (delimit ($p.Params.authors | default (slice)) ", ") | jsonify }},
+    {{- $authorsRaw := $p.Params.authors -}}
+    {{- $authorsList := slice -}}
+    {{- if $authorsRaw -}}
+      {{- $typ := printf "%T" $authorsRaw -}}
+      {{- if or (eq $typ "[]string") (eq $typ "[]interface {}") -}}
+        {{- range $authorsRaw -}}
+          {{- $name := strings.TrimSpace (printf "%v" .) -}}
+          {{- if ne $name "" -}}
+            {{- $authorsList = $authorsList | append $name -}}
+          {{- end -}}
+        {{- end -}}
+      {{- else -}}
+        {{- $name := strings.TrimSpace (printf "%v" $authorsRaw) -}}
+        {{- if ne $name "" -}}
+          {{- $authorsList = $authorsList | append $name -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+    "author": {{ (delimit $authorsList ", ") | jsonify }},
+    "authors": [
+      {{- $firstAuthor := true -}}
+      {{- range $authorsList -}}
+        {{- $name := . -}}
+        {{- $slug := urlize $name -}}
+        {{- $permalink := "" -}}
+        {{- if ne $slug "" -}}
+          {{- with site.GetPage (printf "/authors/%s" $slug) -}}
+            {{- $permalink = .RelPermalink -}}
+          {{- end -}}
+          {{- if eq $permalink "" -}}
+            {{- $permalink = printf "/authors/%s/" $slug -}}
+          {{- end -}}
+        {{- end -}}
+        {{- if $firstAuthor -}}{{- $firstAuthor = false -}}{{- else -}},{{- end -}}
+        {
+          "name": {{ $name | jsonify }},
+          "permalink": {{ if $permalink }}{{ $permalink | jsonify }}{{ else }}null{{ end }}
+        }
+      {{- end -}}
+    ],
     "categories": {{ if $p.Params.categories }}{{ $p.Params.categories | jsonify }}{{ else }}[]{{ end }},
     "tags": {{ if $p.Params.tags }}{{ $p.Params.tags | jsonify }}{{ else }}[]{{ end }},
     "cover": {{ if $cover }}{{ $cover | jsonify }}{{ else }}null{{ end }},

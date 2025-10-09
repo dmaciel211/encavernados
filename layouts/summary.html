@@ -71,15 +71,21 @@
   <div class="post-text">
     <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
 
-    {{ with .Params.authors }}
-      <p class="post-author">
-        Por&nbsp;
-        {{- $n := sub (len .) 1 -}}
-        {{- range $i, $a := . -}}
-          <a href="/authors/{{ $a | urlize }}">{{ $a }}</a>{{ if lt $i $n }}, {{ end }}
-        {{- end -}}
-      </p>
-    {{ end }}
+    <p class="post-summary__meta">
+      <span class="post-summary__date">
+        <time datetime="{{ .Date }}">{{ .Date.Format "02/01/2006" }}</time>
+      </span>
+      {{ with .Params.authors }}
+        <span class="post-summary__meta-sep" aria-hidden="true">·</span>
+        <span class="post-summary__authors">
+          Por&nbsp;
+          {{- $n := sub (len .) 1 -}}
+          {{- range $i, $a := . -}}
+            <a href="/authors/{{ $a | urlize }}">{{ $a }}</a>{{ if lt $i $n }}, {{ end }}
+          {{- end -}}
+        </span>
+      {{ end }}
+    </p>
 
     {{ with .Params.description }}
       <p class="post-description">{{ . | truncate 160 }}</p>

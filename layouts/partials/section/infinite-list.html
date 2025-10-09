@@ -1,0 +1,331 @@
+{{- $page := .Page -}}
+{{- $title := .Title | default $page.Title -}}
+{{- $keySource := .Key | default $page.Section -}}
+{{- $key := anchorize (printf "%v" (default "feed" $keySource)) -}}
+{{- if eq $key "" -}}
+  {{- $key = "feed" -}}
+{{- end -}}
+{{- $jsonInput := .JSON | default (printf "%sindex.json" $page.RelPermalink) -}}
+{{- $jsonURL := cond (or (strings.HasPrefix $jsonInput "http://") (strings.HasPrefix $jsonInput "https://")) $jsonInput (relURL $jsonInput) -}}
+{{- $searchPlaceholder := .SearchPlaceholder | default "Buscar..." -}}
+{{- $emptyText := .EmptyText | default "No se encontraron resultados." -}}
+{{- $noItemsText := .NoItemsText | default $emptyText -}}
+{{- $chunk := .Chunk | default 9 -}}
+{{- $defaultCover := $page.Site.Params.defaultCover | default "/media/default-cover.webp" -}}
+{{- $defaultCoverURL := cond (or (strings.HasPrefix $defaultCover "http://") (strings.HasPrefix $defaultCover "https://")) $defaultCover (relURL $defaultCover) -}}
+{{- $showSearch := true -}}
+{{- with .ShowSearch }}{{- $showSearch = . -}}{{- end -}}
+{{- $searchID := printf "js-%s-search" $key -}}
+{{- $gridID := printf "js-%s-grid" $key -}}
+{{- $loaderID := printf "js-%s-loader" $key -}}
+{{- $emptyID := printf "js-%s-empty" $key -}}
+{{- $sentinelID := printf "js-%s-sentinel" $key -}}
+
+<section class="post-list" data-feed="{{ $key }}">
+  <h1 class="post-list__title">{{ $title }}</h1>
+
+  {{- if $showSearch -}}
+    <div class="articulos-search">
+      <input
+        id="{{ $searchID }}"
+        type="search"
+        placeholder="{{ $searchPlaceholder }}"
+        aria-label="{{ $searchPlaceholder }}">
+    </div>
+  {{- end -}}
+
+  <div id="{{ $gridID }}" class="post-grid" aria-live="polite"></div>
+
+  <div id="{{ $loaderID }}" class="loader" hidden>Cargando...</div>
+  <div id="{{ $emptyID }}" class="empty" hidden>{{ $emptyText }}</div>
+
+  <div id="{{ $sentinelID }}" class="sentinel" aria-hidden="true"></div>
+</section>
+
+<script>
+(function () {
+  const GRID = document.getElementById({{ $gridID | jsonify | safeJS }});
+  if (!GRID) return;
+
+  const LOADER = document.getElementById({{ $loaderID | jsonify | safeJS }});
+  const EMPTY = document.getElementById({{ $emptyID | jsonify | safeJS }});
+  const SENTINEL = document.getElementById({{ $sentinelID | jsonify | safeJS }});
+  const SEARCH = document.getElementById({{ $searchID | jsonify | safeJS }});
+
+  const DEFAULT_COVER = {{ $defaultCoverURL | jsonify | safeJS }};
+  const EMPTY_TEXT = {{ $emptyText | jsonify | safeJS }};
+  const NO_ITEMS_TEXT = {{ $noItemsText | jsonify | safeJS }};
+  const JSON_URL = {{ $jsonURL | jsonify | safeJS }};
+  const CHUNK = {{ $chunk }};
+
+  let DATA = [];
+  let filtered = [];
+  let cursor = 0;
+  let loading = false;
+
+  function extractYouTubeId(str) {
+    const value = (str || '').trim();
+    if (!value) return '';
+    const match = value.match(/(?:v=|be\/|embed\/)([A-Za-z0-9_-]{11})/);
+    if (match && match[1]) return match[1];
+    return /^[A-Za-z0-9_-]{11}$/.test(value) ? value : '';
+  }
+
+  function authorSlug(name) {
+    return (name || '')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-');
+  }
+
+  function authorEntry(entry) {
+    if (entry && typeof entry === 'object') {
+      const name = String(entry.name || '').trim();
+      const provided = String(entry.permalink || '').trim();
+      const fallback = name ? `/authors/${authorSlug(name)}/` : '';
+      return {
+        name,
+        permalink: provided || fallback
+      };
+    }
+    const name = String(entry || '').trim();
+    return {
+      name,
+      permalink: name ? `/authors/${authorSlug(name)}/` : ''
+    };
+  }
+
+  function setEmpty(message) {
+    if (!EMPTY) return;
+    EMPTY.hidden = false;
+    EMPTY.textContent = message;
+  }
+
+  function hideEmpty() {
+    if (!EMPTY) return;
+    EMPTY.hidden = true;
+  }
+
+  function card(item) {
+    const article = document.createElement('article');
+    article.className = 'post-card';
+
+    const thumbLink = document.createElement('a');
+    thumbLink.className = 'post-card__thumb';
+    thumbLink.href = item.permalink || '#';
+
+    const img = document.createElement('img');
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.alt = item.title || '';
+
+    const ytId = extractYouTubeId(item.youtube);
+    const rawCover = (item.cover || '').trim();
+    if (ytId) {
+      img.src = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+    } else if (rawCover) {
+      if (/^https?:\/\//.test(rawCover) || rawCover.startsWith('/')) {
+        img.src = rawCover;
+      } else {
+        img.src = `/media/${rawCover}`;
+      }
+    } else {
+      img.src = DEFAULT_COVER;
+    }
+    img.onerror = function () {
+      this.onerror = null;
+      this.src = DEFAULT_COVER;
+    };
+
+    thumbLink.appendChild(img);
+    article.appendChild(thumbLink);
+
+    const body = document.createElement('div');
+    body.className = 'post-card__body';
+
+    const titleEl = document.createElement('h2');
+    titleEl.className = 'post-card__title';
+
+    const titleLink = document.createElement('a');
+    titleLink.href = item.permalink || '#';
+    titleLink.textContent = item.title || '';
+    titleEl.appendChild(titleLink);
+
+    const excerpt = document.createElement('p');
+    excerpt.className = 'post-card__excerpt';
+    excerpt.textContent = item.summary || '';
+
+    const meta = document.createElement('div');
+    meta.className = 'post-card__meta';
+
+    const dateSpan = document.createElement('span');
+    dateSpan.className = 'post-card__date';
+    const iso = (item.date || '').slice(0, 10);
+    if (iso) {
+      const time = document.createElement('time');
+      time.dateTime = iso;
+      const parts = iso.split('-');
+      if (parts.length === 3) {
+        time.textContent = `${parts[2]}/${parts[1]}/${parts[0]}`;
+      } else {
+        time.textContent = iso;
+      }
+      dateSpan.appendChild(time);
+    }
+    meta.appendChild(dateSpan);
+
+    let authorList = [];
+    if (Array.isArray(item.authors) && item.authors.length) {
+      authorList = item.authors.map(authorEntry).filter(entry => entry.name);
+    } else if (item.author) {
+      authorList = String(item.author)
+        .split(',')
+        .map(name => authorEntry(name))
+        .filter(entry => entry.name);
+    }
+
+    if (authorList.length) {
+      const sep = document.createElement('span');
+      sep.className = 'post-card__meta-sep';
+      sep.setAttribute('aria-hidden', 'true');
+      sep.textContent = '·';
+      meta.appendChild(sep);
+
+      const authors = document.createElement('span');
+      authors.className = 'post-card__authors';
+      authors.appendChild(document.createTextNode('Por '));
+      authorList.forEach((info, idx) => {
+        if (info.permalink) {
+          const link = document.createElement('a');
+          link.href = info.permalink;
+          link.textContent = info.name;
+          authors.appendChild(link);
+        } else {
+          authors.appendChild(document.createTextNode(info.name));
+        }
+        if (idx < authorList.length - 1) {
+          authors.appendChild(document.createTextNode(', '));
+        }
+      });
+      meta.appendChild(authors);
+    }
+
+    const more = document.createElement('a');
+    more.className = 'post-card__readmore';
+    more.href = item.permalink || '#';
+    more.textContent = 'Leer más →';
+
+    body.appendChild(titleEl);
+    body.appendChild(excerpt);
+    body.appendChild(meta);
+    body.appendChild(more);
+    article.appendChild(body);
+
+    return article;
+  }
+
+  function renderMore() {
+    if (loading) return;
+    if (cursor >= filtered.length) return;
+    loading = true;
+    if (LOADER) LOADER.hidden = false;
+
+    const slice = filtered.slice(cursor, cursor + CHUNK);
+    if (!slice.length) {
+      if (LOADER) LOADER.hidden = true;
+      loading = false;
+      return;
+    }
+
+    hideEmpty();
+    slice.forEach(item => GRID.appendChild(card(item)));
+    cursor += slice.length;
+    if (LOADER) LOADER.hidden = true;
+    loading = false;
+  }
+
+  function applyFilter(query) {
+    const term = (query || '').trim().toLowerCase();
+    if (!term) {
+      filtered = DATA;
+    } else {
+      filtered = DATA.filter(item => {
+        const cats = Array.isArray(item.categories) ? item.categories.join(' ') : String(item.categories || '');
+        const tags = Array.isArray(item.tags) ? item.tags.join(' ') : String(item.tags || '');
+        const haystack = [
+          item.title || '',
+          item.summary || '',
+          item.author || '',
+          cats,
+          tags
+        ].join(' ').toLowerCase();
+        return haystack.includes(term);
+      });
+    }
+    GRID.innerHTML = '';
+    cursor = 0;
+    if (!filtered.length) {
+      setEmpty(EMPTY_TEXT);
+      if (LOADER) LOADER.hidden = true;
+      return;
+    }
+    renderMore();
+  }
+
+  const observer = SENTINEL ? new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && cursor < filtered.length) {
+        renderMore();
+      }
+    });
+  }, { rootMargin: '800px 0px' }) : null;
+  if (observer && SENTINEL) {
+    observer.observe(SENTINEL);
+  }
+
+  if (SEARCH) {
+    SEARCH.addEventListener('input', () => applyFilter(SEARCH.value));
+  }
+
+  const cacheBust = JSON_URL.indexOf('?') === -1 ? '?v={{ now.Unix }}' : '&v={{ now.Unix }}';
+  fetch(JSON_URL + cacheBust, { credentials: 'same-origin' })
+    .then(res => res.json())
+    .then(json => {
+      DATA = (json || []).map(item => ({
+        ...item,
+        categories: Array.isArray(item.categories) ? item.categories : (item.categories ? [item.categories] : []),
+        tags: Array.isArray(item.tags) ? item.tags : (item.tags ? [item.tags] : []),
+        authors: (() => {
+          if (Array.isArray(item.authors) && item.authors.length) {
+            return item.authors.map(authorEntry).filter(entry => entry.name);
+          }
+          if (item.author) {
+            return String(item.author)
+              .split(',')
+              .map(name => authorEntry(name))
+              .filter(entry => entry.name);
+          }
+          return [];
+        })(),
+        youtube: (item.youtube || '').trim(),
+        cover: (item.cover || '').trim()
+      }));
+
+      if (!DATA.length) {
+        setEmpty(NO_ITEMS_TEXT);
+        if (LOADER) LOADER.hidden = true;
+        return;
+      }
+
+      filtered = DATA;
+      renderMore();
+    })
+    .catch(err => {
+      console.error('Error cargando listado', err);
+      setEmpty('No se pudo cargar el listado.');
+      if (LOADER) LOADER.hidden = true;
+    });
+})();
+</script>

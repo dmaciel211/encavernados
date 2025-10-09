@@ -1,33 +1,10 @@
-﻿{{ define "content" }}
-  {{- $target := "articulos" -}}
-  {{- $posts := slice -}}
-  {{- range (where .Site.RegularPages "Section" "articulos").ByDate.Reverse -}}
-    {{- $cats := .Params.categories -}}
-    {{- $typ := printf "%T" $cats -}}
-    {{- $match := false -}}
-    {{- if eq $typ "string" -}}
-      {{- $match = eq (lower (printf "%v" $cats)) $target -}}
-    {{- else if or (eq $typ "[]string") (eq $typ "[]interface {}") -}}
-      {{- range $c := $cats -}}
-        {{- if eq (lower (printf "%v" $c)) $target -}}
-          {{- $match = true -}}
-        {{- end -}}
-      {{- end -}}
-    {{- end -}}
-    {{- if $match -}}
-      {{- $posts = $posts | append . -}}
-    {{- end -}}
-  {{- end -}}
-
-  <section class="post-list">
-    <h1 class="post-list__title">Artículos</h1>
-
-    {{- if gt (len $posts) 0 -}}
-      {{- range $posts -}}
-        {{ .Render "summary" }}
-      {{- end -}}
-    {{- else -}}
-      <p class="empty">Todavía no hay artículos publicados en esta categoría.</p>
-    {{- end -}}
-  </section>
+{{ define "content" }}
+  {{- partial "section/infinite-list.html" (dict
+    "Page" .
+    "Title" "Artículos"
+    "Key" "articulos"
+    "SearchPlaceholder" "Buscar artículos..."
+    "EmptyText" "No se encontraron resultados."
+    "NoItemsText" "Todavía no hay artículos publicados en esta categoría."
+  ) -}}
 {{ end }}
