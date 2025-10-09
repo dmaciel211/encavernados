@@ -6,7 +6,7 @@
   right: 50%;
   margin-left: -50vw;
   margin-right: -50vw;
-  margin-top: 0;
+  margin-top: var(--header-h);
   margin-bottom: 2rem;
 }
 .home-hero__media img {
@@ -17,12 +17,6 @@
 }
 @media (max-width: 900px) {
   .home-hero__media img { aspect-ratio: 16 / 9; }
-}
-
-@media (max-width: 768px) {
-  .home-hero {
-    margin-top: var(--header-h);
-  }
 }
 
 /* ===== Artículos recientes (SIN depender de .home) ===== */
