@@ -19,6 +19,12 @@
   .home-hero__media img { aspect-ratio: 16 / 9; }
 }
 
+@media (max-width: 768px) {
+  .home-hero {
+    margin-top: var(--header-h);
+  }
+}
+
 /* ===== Artículos recientes (SIN depender de .home) ===== */
 .home-articles {
   max-width: var(--page-width);
@@ -79,18 +85,6 @@
   padding: 4px;
 }
 
-/* Botón “Ver más artículos” */
-.home-articles .ver-mas {
-  margin-top: .75rem;
-}
-.home-articles .ver-mas a {
-  display: inline-block;
-  font-weight: 600;
-  text-decoration: none;
-  border-bottom: 2px solid currentColor;
-  color: var(--enc-primary);
-}
-
 /* ===== Sobre Encavernados ===== */
 .home-about {
   max-width: var(--page-width);
@@ -116,5 +110,7 @@
 /* En mobile, que quede centrado como item del menú */
 #menu-mobile .theme-switch {
   margin: 0.5rem auto;   /* centrado */
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

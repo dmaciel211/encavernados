@@ -48,10 +48,12 @@
 
   &__body { padding: .9rem 1rem 1.1rem; }
   &__title { margin: 0 0 .35rem; font-size: 1.15rem; line-height: 1.25; }
-  &__title a { text-decoration: none; }
+  &__title a { text-decoration: none; color: inherit; transition: color .2s ease; }
+  &__title a:hover { color: var(--enc-hover); }
   &__excerpt { margin: 0 0 .7rem; color: var(--enc-ink-soft); line-height: 1.55; }
   &__meta { font-size: .9rem; color: var(--enc-ink-soft); margin-bottom: .6rem; }
-  &__readmore { display: inline-block; font-weight: 600; text-decoration: none; border-bottom: 2px solid currentColor; color: var(--enc-primary); }
+  &__readmore { display: inline-block; font-weight: 600; text-decoration: none; border-bottom: 2px solid currentColor; color: var(--enc-primary); transition: color .2s ease; }
+  &__readmore:hover { color: var(--enc-hover); }
 }
 
 /* Contenedor del thumb mantiene 16:9 */
