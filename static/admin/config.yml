@@ -18,6 +18,7 @@ collections:
     media_folder_relative: true
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    path: "{{year}}-{{month}}-{{day}}-{{slug}}/index"
     fields:
       - {label: "Título", name: "title", widget: "string"}
       - label: "Autores"
