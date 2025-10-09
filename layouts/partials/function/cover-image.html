@@ -16,10 +16,26 @@
     {{- $base := path.Base $cover -}}
     {{- $resource = or ($page.Resources.Get $base) ($page.Resources.GetMatch $base) -}}
   {{- end -}}
+  {{- if and (not $resource) (not (strings.HasPrefix (lower $cover) "http://")) (not (strings.HasPrefix (lower $cover) "https://")) -}}
+    {{- $clean := strings.TrimPrefix "/" $cover -}}
+    {{- $candidates := slice $cover $clean (path.Base $cover) (path.Join "media" (path.Base $cover)) -}}
+    {{- range $candidates -}}
+      {{- if not $resource -}}
+        {{- $candidate := . | strings.TrimPrefix "/" -}}
+        {{- with resources.Get $candidate -}}
+          {{- $resource = . -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
 {{- end -}}
 
 {{- if $resource -}}
-  {{- $alt := or $altOverride $resource.Params.alt $resource.Title $page.Title -}}
+  {{- $resTitle := strings.TrimSpace $resource.Title -}}
+  {{- if or (eq $resTitle "") (eq (strings.ToLower $resTitle) (strings.ToLower $resource.Name)) -}}
+    {{- $resTitle = "" -}}
+  {{- end -}}
+  {{- $alt := or $altOverride $resource.Params.alt $resTitle $page.Title -}}
   {{- $webp := slice -}}
   {{- $fallback := slice -}}
   {{- $validWidths := slice -}}
@@ -53,26 +69,25 @@
   {{- if $scratch -}}
     {{- $_ := $scratch.Set $key $result -}}
   {{- end -}}
-  {{- return -}}
-{{- end -}}
-
-{{- $src := "" -}}
-{{- if $cover -}}
-  {{- if or (hasPrefix (lower $cover) "http") (hasPrefix $cover "/") -}}
-    {{- $src = $cover -}}
-  {{- else -}}
-    {{- $src = printf "/media/%s" $cover -}}
-  {{- end -}}
 {{- else -}}
-  {{- $src = $default -}}
-{{- end -}}
-{{- $alt := or $altOverride $page.Title -}}
-{{- $result := dict
-    "isResource" false
-    "alt" $alt
-    "sizes" $sizes
-    "src" $src
-  -}}
-{{- if $scratch -}}
-  {{- $_ := $scratch.Set $key $result -}}
+  {{- $src := "" -}}
+  {{- if $cover -}}
+    {{- if or (hasPrefix (lower $cover) "http") (hasPrefix $cover "/") -}}
+      {{- $src = $cover -}}
+    {{- else -}}
+      {{- $src = printf "/media/%s" $cover -}}
+    {{- end -}}
+  {{- else -}}
+    {{- $src = $default -}}
+  {{- end -}}
+  {{- $alt := or $altOverride $page.Title -}}
+  {{- $result := dict
+      "isResource" false
+      "alt" $alt
+      "sizes" $sizes
+      "src" $src
+    -}}
+  {{- if $scratch -}}
+    {{- $_ := $scratch.Set $key $result -}}
+  {{- end -}}
 {{- end -}}
