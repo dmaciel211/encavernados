@@ -29,8 +29,10 @@ Entonces así uno tiene un doble registro; *histórico* el del libro y el de qui
 
 Lo histórico aparece como categoría que articula campos de análisis por así decir, más generales, mientras que además, el registro *singular* nos pone de algún modo en diálogo con las reflexiones , interrogantes, acentos, puestos ahí a modo de intervención por el anterior lector de aquel objeto que se transforma en una suerte de “camino” que se hace al pensar. 
 
-¿a quienes irán nuestros libros? Los que escribimos y los que leemos, ¿sobrevivirán la intempestiva transformación que la tecnológica nos impone? ¿Podrán atravesar esta época de desinterés por la profundidad que abre el mundo de la imaginación literaria? Interrogantes imposibles de responder ahora, contra los hechos mejor sigamos caminando, buscando e interviniendo en la historia, pequeños lectores, grandes pasiones, nos leemos la próxima. 
+¿A quienes irán nuestros libros? Los que escribimos y los que leemos, ¿sobrevivirán la intempestiva transformación que la tecnológica nos impone? ¿Podrán atravesar esta época de desinterés por la profundidad que abre el mundo de la imaginación literaria? Interrogantes imposibles de responder ahora, contra los hechos mejor sigamos caminando, buscando e interviniendo en la historia, pequeños lectores, grandes pasiones.
 
-Como conclusión quedan preguntas, ya vieron que leer no es pavada. ¿Qué diferencia hay entre una lectura en papel y una lectura digital? ¿la hay? Si la hay ¿podemos ejercer una valoración al respecto? ¿Cuál? Preguntas aparecen siempre, y siempre necesariamente quedarán ahí como puertas, esperando ser abiertas. Vieron lo importante de leer, pero también de participar del acto comunitario de ese ritual lector, acontecido en una feria de libros usados, experiencia que al fin y al cabo cultivó el germen de este fruto acontecido en texto. ¿fruto maduro? Lo dudo. 
+Como conclusión quedan preguntas, ya vieron que leer no es pavada. ¿Qué diferencia hay entre una lectura en papel y una lectura digital? ¿la hay? Si la hay ¿podemos ejercer una valoración al respecto? ¿Cuál? Preguntas aparecen siempre, y siempre necesariamente quedarán ahí como puertas, esperando ser abiertas. Vieron lo importante de leer, pero también de participar del acto comunitario de ese ritual lector, acontecido en una feria de libros usados, experiencia que al fin y al cabo cultivó el germen de este fruto acontecido en texto. ¿fruto maduro? Lo dudo. Nos leemos la próxima. 
+
+
 
 \    Federico Sebastian Gerez.
