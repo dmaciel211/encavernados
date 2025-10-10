@@ -4,6 +4,7 @@ authors:
   - Federico Sebastián Geréz
 date: 2025-10-10T10:13:00.000-03:00
 categories: reflexiones
+cover: christmas-background-1659717_640.jpg
 description: Esta reflexión nace luego de mi paso por una feria del libros usados.
 ---
 
