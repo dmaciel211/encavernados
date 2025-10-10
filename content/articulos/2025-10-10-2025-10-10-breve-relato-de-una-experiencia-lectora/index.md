@@ -7,10 +7,7 @@ categories: reflexiones
 cover: christmas-background-1659717_640.jpg
 description: Esta reflexión nace luego de mi paso por una feria del libros usados.
 ---
-
-
-
-El pasado sábado 04 de octubre tuve la oportunidad de asistir a la feria del libro realizada en la biblioteca nacional Mariano Moreno. Llamativo y esperanzador fue el hecho de presenciar a tantas personas jóvenes reunidas con el único objetivo de encontrar entre cientos y miles, un libro compañero de aventuras literarias.
+El pasado sábado 04 de octubre tuve la oportunidad de asistir a la feria del libro realizada en la Biblioteca Nacional Mariano Moreno. Llamativo y esperanzador fue el hecho de presenciar a tantas personas jóvenes reunidas con el único objetivo de encontrar entre cientos y miles, un libro compañero de aventuras literarias.
 
 No llegué a contar las mesas de exposición, pero rodeaban toda la plaza situada junto a la Biblioteca Nacional, en varias ocasiones tuve que salir literalmente mareado por la vorágine de ver tantos libros y títulos juntos. El día acompañó la jornada con sol y se prestó a darle marco al evento, que tuvo un puesto de chipas para merendar y un bar aledaño para recargar energías en la búsqueda de ejemplares.
 
@@ -35,7 +32,5 @@ Lo histórico aparece como categoría que articula campos de análisis por así 
 ¿a quienes irán nuestros libros? Los que escribimos y los que leemos, ¿sobrevivirán la intempestiva transformación que la tecnológica nos impone? ¿Podrán atravesar esta época de desinterés por la profundidad que abre el mundo de la imaginación literaria? Interrogantes imposibles de responder ahora, contra los hechos mejor sigamos caminando, buscando e interviniendo en la historia, pequeños lectores, grandes pasiones, nos leemos la próxima. 
 
 Como conclusión quedan preguntas, ya vieron que leer no es pavada. ¿Qué diferencia hay entre una lectura en papel y una lectura digital? ¿la hay? Si la hay ¿podemos ejercer una valoración al respecto? ¿Cuál? Preguntas aparecen siempre, y siempre necesariamente quedarán ahí como puertas, esperando ser abiertas. Vieron lo importante de leer, pero también de participar del acto comunitario de ese ritual lector, acontecido en una feria de libros usados, experiencia que al fin y al cabo cultivó el germen de este fruto acontecido en texto. ¿fruto maduro? Lo dudo. 
-
-
 
 \    Federico Sebastian Gerez.
