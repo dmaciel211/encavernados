@@ -9,7 +9,7 @@ link: "https://www.mercadolibre.com.ar"
 
 ---
 <p>
-    <strong>El tango es la apoteosis del enojo.</strong> Sus letras gruñen y ladran, patalean ofuscamientos, 
+    <strong>El tango es la apoteosis del enojo.</strong> Sus letras gruñen y ladran, patalean ofuscamientos,  
     dispensan maldiciones y de bronca exultantes resplandecen. Usualmente, canturrean dolores que –empastados 
     por el peso del tiempo– devienen rencor, mutan en rebeldía y, en ocasiones, modulan hasta deformarse en odios. 
   </p>
