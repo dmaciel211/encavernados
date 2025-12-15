@@ -1,5 +1,5 @@
 ---
-title: 'PRESENTACION DE "EL PODER EN JUEGO" '
+title: 'PRESENTACIÓN DE "EL PODER EN JUEGO" '
 authors:
   - Carlos Alberto Butavand
 date: 2025-12-14T21:21:00.000-03:00
