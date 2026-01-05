@@ -79,3 +79,25 @@ description: Un ensayo acontecido del dialogo con estudiantes respondiendo la
 <p>Y hasta me sugirieron que ten&iacute;a</p>
 
 <p>notorias cualidades para serlo.</p>
+
+<p>Por eso mi futuro estaba en la otredad.</p>
+
+<p>&nbsp;</p>
+
+<p>El &uacute;nico problema ha sido siempre</p>
+
+<p>mi tozudez cong&eacute;nita</p>
+
+<p>neciamente no quer&iacute;a ser otro</p>
+
+<p>por lo tanto contin&uacute;e siendo el mismo&rdquo;</p>
+
+<p>&nbsp;</p>
+
+<p>Mario Benedetti: Otherness (otredad)</p>
+
+<p><u>&nbsp;</u></p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
