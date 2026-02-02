@@ -1,5 +1,5 @@
 ---
-title: FOTORGRAFIA DE LA COERSIÓN
+title: FOTORGRAFIA DE LA COERCIÓN
 authors:
   - Carlos Alberto Butavand
 date: 2026-02-02T20:25:00.000-03:00
