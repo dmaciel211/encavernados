@@ -10,7 +10,11 @@ description: Una reflexión que lleva el Ethos de una experiencia y la mirada
 ---
 <p><u>-FOTOGRAF&Iacute;A DE LA COERSI&Oacute;N-</u></p>
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dejad que el pueblo se gobierne a s&iacute; mismo</p>
+
+
+\    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dejad que el pueblo se gobierne a s&iacute; mismo</p>
+
+
 
 <p>El presente escrito comenz&oacute; siendo un cuento; a los pocos renglones me di cuenta de que hab&iacute;a extraviado aquella d&uacute;ctil plasticidad que <strong>alguna</strong> vez me acompa&ntilde;&oacute;. Luego, intent&eacute; sintetizar ideas en conceptos po&eacute;ticos, pero me encontr&eacute; inmediatamente con esa incapacidad que siempre tuve a la hora de escribir versos. Es que escribir filosof&iacute;a me ha endurecido, me ha vuelto r&uacute;stico. Sin embargo, me resisto <strong>a</strong> abandonar la cadencia narrativa y la terminolog&iacute;a po&eacute;tica, supongo que por una cuesti&oacute;n casi instintiva; debido a ello, qued&oacute; el escrito que sigue.</p>
 
